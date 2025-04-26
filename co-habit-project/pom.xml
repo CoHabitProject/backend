@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.5</version>
+        <version>3.4.3</version>
     </parent>
 
     <groupId>esgi.fr</groupId>
@@ -56,10 +56,6 @@
         <spring.boot.version>3.4.3</spring.boot.version>
         <lombok.version>1.18.34</lombok.version>
         <mapstruct.version>1.6.3</mapstruct.version>
-        <avis.domain>0.0.1-SNAPSHOT</avis.domain>
-        <avis.usecase>0.0.1-SNAPSHOT</avis.usecase>
-        <avis.persistance>0.0.1-SNAPSHOT</avis.persistance>
-        <avis.web>0.0.1-SNAPSHOT</avis.web>
         <junit-jupiter.version>5.12.0</junit-jupiter.version>
     </properties>
 
