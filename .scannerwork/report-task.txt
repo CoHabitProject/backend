@@ -1,0 +1,6 @@
+projectKey=cohabit-backend
+serverUrl=http://sonarqube:9000
+serverVersion=25.4.0.105899
+dashboardUrl=http://sonarqube:9000/dashboard?id=cohabit-backend
+ceTaskId=9076cfdc-22f8-4063-8038-eb6ede914aff
+ceTaskUrl=http://sonarqube:9000/api/ce/task?id=9076cfdc-22f8-4063-8038-eb6ede914aff
