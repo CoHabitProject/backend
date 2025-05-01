@@ -1,0 +1,114 @@
+@startuml
+title Modèle Logique de Données – Gestion de Colocation (avec zone Utilisateurs)
+
+' Orientation et style global
+left to right direction
+skinparam linetype ortho
+skinparam backgroundColor #F9F9F9
+skinparam nodesep 80
+skinparam ranksep 100
+skinparam classAttributeIconSize 0
+
+' Couleurs de groupe
+skinparam package {
+  BackgroundColor LightBlue
+  BorderColor DarkBlue
+  FontStyle bold
+}
+
+
+package "Utilisateurs" {
+    abstract class Utilisateur {
+        + idUtilisateur : int
+        + nom : String
+        + prenom : String
+        + email : String
+        + motDePasse : String
+        + role : String
+        + actif : boolean
+    }
+
+    class Colocataire {
+        + droitsRestreints : boolean
+    }
+
+    class ColocataireGestionnaire {
+        + dateNomination : LocalDate
+    }
+
+    class Parent {
+        + lienParental : String
+    }
+
+    Utilisateur <|-- Colocataire
+    Colocataire <|-- ColocataireGestionnaire
+    Colocataire <|-- Parent
+}
+
+class Colocation {
+    + idColocation : int
+    + nom : String
+    + adresse : String
+    + dateCreation : LocalDate
+    + idTache : int
+}
+
+class Tache {
+    + idTache : int
+    + titre : String
+    + description : String
+    + dateEcheance : LocalDate
+    + statut : String
+}
+
+class Depense {
+    + idDepense : int
+    + libelle : String
+    + montant : BigDecimal
+    + dateDepense : LocalDate
+}
+
+class PartageDepense {
+    + idPartage : int
+    + montant : BigDecimal
+}
+
+class Virement {
+    + idVirement : int
+    + montant : BigDecimal
+    + dateVirement : LocalDate
+}
+
+class Invitation {
+    + idInvitation : int
+    + code : String
+    + type : String
+    + dateCreation : LocalDateTime
+    + dateExpiration : LocalDateTime
+    + statut : String
+}
+
+Colocation "1" o-- "0..*" Colocataire : membres
+Colocation "1" o-- "0..1" ColocataireGestionnaire : gestionnaire
+
+Colocation "1" *-- "0..*" Tache : taches
+Tache "0..*" --> "1" Colocataire : assigneeA
+
+Colocation "1" *-- "0..*" Depense : depenses
+Depense "1" --> "1" Utilisateur : payeur
+Depense "1" o-- "1..*" PartageDepense : partages
+PartageDepense "1" --> "1" Utilisateur : beneficiaire
+
+Invitation "1" --> "1" Colocation : concerne
+
+note right of Tache
+Les tâches sont stockées dans Elasticsearch.
+La colocation conserve uniquement l'id de tâche.
+end note
+
+note right of Invitation
+Chaque invitation est générée avec un code unique (lien ou QR code).
+Elle est valide pendant 30 minutes à partir de sa création.
+end note
+
+@enduml

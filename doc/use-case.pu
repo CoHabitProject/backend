@@ -1,0 +1,154 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+skinparam backgroundColor #FFFFFF
+skinparam nodesep 80
+skinparam ranksep 100
+skinparam usecase {
+  BackgroundColor<<Compte>> #DDEEFF
+  BackgroundColor<<Budget>> #E5FFDD
+  BackgroundColor<<Taches>> #FFE5DD
+  BackgroundColor<<Colocataires>> #FFF5CC
+  BackgroundColor<<Admin>> #F0F0F0
+  BackgroundColor<<Gestion>> #E0D7FF
+}
+
+actor "Administrateur de plateforme" as Admin
+actor "Habitant" as Habitant
+actor "Parent" as Parent
+
+' Fonctions de Compte
+package "Fonctionnalités de Compte" {
+  usecase "S’inscrire" <<Compte>> as UC1
+  usecase "Se connecter" <<Compte>> as UC2
+  usecase "Gérer son compte utilisateur" <<Compte>> as UC3
+  usecase "Modifier les infos personnelles" <<Compte>> as UC31
+  usecase "Changer son mot de passe" <<Compte>> as UC32
+  UC3 --> UC31 : <<include>>
+  UC3 --> UC32 : <<include>>
+
+  usecase "Gérer les comptes utilisateurs" <<Admin>> as UC11
+  usecase "Réinitialiser mot de passe" <<Admin>> as UC12
+  usecase "Désactiver un compte" <<Admin>> as UC13
+  usecase "Consulter l'activité utilisateur" <<Admin>> as UC14
+  UC11 --> UC12 : <<include>>
+  UC11 --> UC13 : <<include>>
+  UC11 --> UC14 : <<include>>
+}
+
+' Fonctions de Budget
+package "Gestion du Budget" {
+  usecase "Gérer le budget de la colocation" <<Budget>> as UC4
+  usecase "Ajouter une dépense" <<Budget>> as UC41
+  usecase "Modifier une dépense" <<Budget>> as UC42
+  usecase "Effectuer un virement" <<Budget>> as UC43
+  usecase "Consulter les dépenses" <<Budget>> as UC46
+  usecase "Consulter ses propres dépenses" <<Budget>> as UC47
+  usecase "Consulter les dépenses d'autres colocataires" <<Budget>> as UC48
+  usecase "Consulter les dépenses de son enfant" <<Budget>> as UC44
+  usecase "Consulter les budgets en colocation" <<Admin>> as UC45
+  UC4 --> UC41 : <<include>>
+  UC4 --> UC42 : <<include>>
+  UC4 --> UC43 : <<include>>
+  UC4 <|-- UC45 : <<extend>>
+  UC46 --> UC47 : <<include>>
+  UC46 <|-- UC48 : <<extend>>
+}
+
+' Fonctions de Tâches
+package "Gestion des Tâches" {
+  usecase "Gérer les tâches ménagères" <<Taches>> as UC5
+  usecase "Ajouter / modifier / supprimer une tâche" <<Taches>> as UC6
+  usecase "Visualiser la répartition des tâches" <<Taches>> as UC8
+  usecase "Calculer des statistiques\nhebdomadaires et mensuelles" <<Taches>> as UC7
+  usecase "Consulter les tâches en colocation" <<Admin>> as UC15
+  UC5 --> UC6 : <<include>>
+  UC5 --> UC8 : <<include>>
+  UC5 <|-- UC7 : <<extend>>
+  UC5 <|-- UC15 : <<extend>>
+}
+
+' Fonctions Colocataires
+package "Colocataires" {
+  usecase "Consulter la liste des colocataires\net leurs profils" <<Colocataires>> as UC9
+}
+
+' Consultation globale
+package "Consultation globale" {
+  usecase "Consulter la vie en colocation" <<Admin>> as UC10
+}
+
+' Gestion de l'espace colocation
+package "Espace de colocation" {
+  usecase "Gérer l’espace de colocation" <<Gestion>> as UC50
+  usecase "Ajouter un colocataire (via lien d’invitation)" <<Gestion>> as UC51
+  usecase "Retirer un colocataire" <<Gestion>> as UC52
+  usecase "Transférer le rôle de gestionnaire" <<Gestion>> as UC53
+  usecase "Quitter l’espace de colocation" <<Gestion>> as UC54
+  UC50 --> UC51 : <<include>>
+  UC50 --> UC52 : <<include>>
+  UC50 --> UC53 : <<include>>
+  UC54 <|-- UC50 : <<extend>>
+}
+
+' Relations des acteurs
+Habitant --> UC1
+Habitant --> UC2
+Habitant --> UC3
+Habitant --> UC4
+Habitant --> UC5
+Habitant --> UC7
+Habitant --> UC9
+Habitant --> UC46
+Habitant --> UC50
+Habitant --> UC54
+
+Parent --> UC2
+Parent --> UC3
+Parent --> UC44
+Parent --> UC9
+
+Admin --> UC10
+Admin --> UC11
+Admin --> UC15
+Admin --> UC45
+
+note right of UC7
+Les utilisateurs qui réalisent plus de tâches
+durant la semaine gagnent des "étoiles".
+Ce système de récompense valorise leur engagement
+et peut leur octroyer plus de droits dans la gestion des tâches.
+end note
+
+note right of UC46
+Les habitants peuvent consulter leurs propres dépenses.
+Ils peuvent aussi consulter celles des autres colocataires
+si cette fonction est activée (<<extend>>).
+Les parents ne peuvent consulter que les dépenses de leurs enfants.
+end note
+
+note right of UC50
+Un seul utilisateur est "gestionnaire de l’espace de colocation".
+Il peut :
+- inviter d’autres utilisateurs via un lien,
+- retirer des colocataires,
+- transférer son rôle.
+Il ne peut quitter la colocation que s’il transfère d’abord son rôle.
+end note
+
+note right of Parent
+Le parent peut consulter uniquement :
+- son propre compte,
+- les dépenses liées à ses enfants,
+- la liste des colocataires (vue restreinte).
+Il n'a pas accès aux données des autres membres.
+end note
+
+note right of Admin
+L’administrateur peut :
+- gérer les comptes utilisateurs (réinitialisation, désactivation, suivi),
+- consulter en lecture seule les tâches et budgets de la colocation,
+- avoir une vue globale de la vie en colocation.
+Il ne participe pas aux actions internes.
+end note
+@enduml
