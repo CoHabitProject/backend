@@ -1,0 +1,22 @@
+keycloak:
+  auth-server-url: http://localhost:8080
+  realm: co-habit
+  client:
+    registration:
+      id: co-habit-confidential
+      secret: secret
+  use-resource-role-mappings: true
+
+server:
+  port: 8081
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}
+          jwk-set-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
+
+project:
+  version: @project.version@

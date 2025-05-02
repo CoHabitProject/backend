@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>esgi.fr</groupId>
+        <groupId>fr.esgi</groupId>
         <artifactId>co-habit-project</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
@@ -19,12 +19,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>esgi.fr</groupId>
-            <artifactId>co-habit-web</artifactId>
+            <groupId>fr.esgi</groupId>
+            <artifactId>co-habit-rest</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>esgi.fr</groupId>
+            <groupId>fr.esgi</groupId>
             <artifactId>co-habit-security</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>

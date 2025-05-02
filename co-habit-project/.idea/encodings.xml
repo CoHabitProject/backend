@@ -3,6 +3,8 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/co-habit-application/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/co-habit-application/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/co-habit-domain/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/co-habit-persistence/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/co-habit-rest/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/co-habit-security/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/co-habit-web/src/main/java" charset="UTF-8" />
