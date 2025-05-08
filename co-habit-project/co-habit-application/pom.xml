@@ -35,6 +35,12 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>fr.esgi.CoHabitApplication</mainClass>
+                    <layers>
+                        <enabled>true</enabled>
+                    </layers>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -45,6 +51,6 @@
             </plugin>
         </plugins>
     </build>
-    
+
 
 </project>

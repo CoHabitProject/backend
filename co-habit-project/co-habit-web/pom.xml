@@ -37,4 +37,15 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <!-- Suppression complète de l'option enable-preview -->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
