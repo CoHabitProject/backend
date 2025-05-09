@@ -1,0 +1,32 @@
+keycloak:
+  auth-server-url: http://localhost:8088
+  realm: co-habit
+  client:
+    registration:
+      id: co-habit-confidential
+      secret: secret
+  use-resource-role-mappings: true
+
+server:
+  port: 8080
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}
+          jwk-set-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+project:
+  version: @project.version@
+
+logging:
+  level:
+    org.springframework.web: DEBUG

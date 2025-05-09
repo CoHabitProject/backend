@@ -62,7 +62,7 @@ Le fichier `application.properties` (ou `application.yml`) se trouve dans le mod
 
 Une fois l'application démarrée, la documentation de l'API est disponible aux URLs suivantes :
 
-- Swagger UI : http://localhost:8080/swagger-ui.html
+- Swagger UI : http://localhost:8080/swagger-ui/index.html
 - API Docs : http://localhost:8080/v3/api-docs
 
 ## Sécurité
