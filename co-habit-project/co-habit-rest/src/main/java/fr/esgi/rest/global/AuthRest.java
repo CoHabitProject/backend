@@ -1,5 +1,6 @@
 package fr.esgi.rest.global;
 
+import fr.esgi.domain.exception.TechnicalException;
 import fr.esgi.rest.dto.auth.LoginReqDto;
 import fr.esgi.rest.dto.auth.RefreshReqDto;
 import fr.esgi.rest.dto.auth.RegisterReqDto;
@@ -47,7 +48,7 @@ public class AuthRest {
             }
     )
     public ResponseEntity<Void> register(@RequestBody RegisterReqDto dto) throws
-                                                                          KeycloakRegistrationService.UserAlreadyExistsException {
+                                                                          TechnicalException {
         regService.register(dto.getUsername(), dto.getEmail(), dto.getPassword());
         return ResponseEntity.status(201)
                              .build();

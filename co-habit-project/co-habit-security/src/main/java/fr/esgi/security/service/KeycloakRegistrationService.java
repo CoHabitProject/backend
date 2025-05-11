@@ -1,10 +1,14 @@
 package fr.esgi.security.service;
 
+import fr.esgi.domain.exception.FunctionalException;
+import fr.esgi.domain.exception.TechnicalException;
+import fr.esgi.security.roles.UserRole;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.representations.idm.CredentialRepresentation;
+import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -34,26 +38,23 @@ public class KeycloakRegistrationService {
     }
 
     public void register(String username, String email, String password) throws
-                                                                         UserAlreadyExistsException {
+                                                                         TechnicalException {
         // Check if user already exists by username
         List<UserRepresentation> existingUsers = keycloak.realm(realm)
                                                          .users()
                                                          .searchByEmail(username, true);
 
         if (!existingUsers.isEmpty()) {
-            throw new UserAlreadyExistsException("Email for username already exists");
+            throw new TechnicalException(400, "Email for username already exists");
         }
 
         // Check if user already exists by email
-        existingUsers = existingUsers = keycloak.realm(realm)
-                                                .users()
-                                                .search(email);
-        keycloak.realm(realm)
-                .users()
-                .search(email, null);
+        existingUsers = keycloak.realm(realm)
+                                .users()
+                                .search(email);
 
         if (!existingUsers.isEmpty()) {
-            throw new UserAlreadyExistsException("Email already exists");
+            throw new TechnicalException(400, "Email already exists");
         }
 
         UserRepresentation user = new UserRepresentation();
@@ -72,24 +73,114 @@ public class KeycloakRegistrationService {
             Response response = keycloak.realm(realm)
                                         .users()
                                         .create(user);
-            int      status   = response.getStatus();
+            int status = response.getStatus();
 
             if (status != 201) {
                 throw new RuntimeException("Failed to register user. Status: " + status);
             }
+
+            // Extract user ID from response and assign default role
+            String userId = extractUserIdFromResponse(response);
+            assignDefaultRole(userId, "USR1");
+
         } catch (WebApplicationException e) {
             if (e.getResponse()
                  .getStatus() == 409) {
-                throw new UserAlreadyExistsException("User already exists");
+                throw new TechnicalException(400, "User already exists");
             }
             throw new RuntimeException("Failed to register user", e);
         }
     }
 
-    // Custom exception for user already exists scenario
-    public static class UserAlreadyExistsException extends Exception {
-        public UserAlreadyExistsException(String message) {
-            super(message);
+    private String extractUserIdFromResponse(Response response) {
+        String locationHeader = response.getHeaderString("Location");
+        return locationHeader.substring(locationHeader.lastIndexOf("/") + 1);
+    }
+
+    private void assignDefaultRole(String userId, String roleName) {
+        addRoleToUser(keycloak, realm, userId, roleName);
+    }
+
+    /**
+     * Adds a role to a user
+     *
+     * @param keycloak Keycloak instance
+     * @param realm Realm name
+     * @param userId User ID
+     * @param roleName Role name to add
+     */
+    protected static void addRoleToUser(Keycloak keycloak, String realm, String userId, String roleName) {
+        try {
+            // Get the role representation
+            RoleRepresentation role = keycloak.realm(realm)
+                                              .roles()
+                                              .get(roleName)
+                                              .toRepresentation();
+
+            // Assign the role to the user
+            keycloak.realm(realm)
+                    .users()
+                    .get(userId)
+                    .roles()
+                    .realmLevel()
+                    .add(List.of(role));
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to add role " + roleName + " to user " + userId, e);
         }
     }
+
+    /**
+     * Adds a role USR2 to a user
+     *
+     * @param keycloak Keycloak instance
+     * @param realm    Realm name
+     * @param userId   User ID
+     */
+    public static void promoteUserToManager(Keycloak keycloak, String realm, String userId) {
+        try {
+            // Get the role representation
+            RoleRepresentation role = keycloak.realm(realm)
+                                              .roles()
+                                              .get(UserRole.USR2.name())
+                                              .toRepresentation();
+
+            // Assign the role to the user
+            keycloak.realm(realm)
+                    .users()
+                    .get(userId)
+                    .roles()
+                    .realmLevel()
+                    .add(List.of(role));
+        } catch (Exception e) {
+            throw new FunctionalException("Failed to add role " + UserRole.USR2.getDescription() + " to user " + userId, e);
+        }
+    }
+
+    /**
+     * Removes a role USR2 from a user
+     *
+     * @param keycloak Keycloak instance
+     * @param realm    Realm name
+     * @param userId   User ID
+     */
+    public static void demoteManagerToUser(Keycloak keycloak, String realm, String userId) {
+        try {
+            // Get the role representation
+            RoleRepresentation role = keycloak.realm(realm)
+                                              .roles()
+                                              .get(UserRole.USR2.name())
+                                              .toRepresentation();
+
+            // Remove the role from the user
+            keycloak.realm(realm)
+                    .users()
+                    .get(userId)
+                    .roles()
+                    .realmLevel()
+                    .remove(List.of(role));
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to remove role " + UserRole.USR2.getDescription() + " from user " + userId, e);
+        }
+    }
+
 }
