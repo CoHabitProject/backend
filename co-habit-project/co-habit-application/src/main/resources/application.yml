@@ -17,6 +17,18 @@ spring:
         jwt:
           issuer-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}
           jwk-set-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cohabit
+    username: cohabit
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
 
 springdoc:
   api-docs:
