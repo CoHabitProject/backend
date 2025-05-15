@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="304ed2b1-7377-4180-b3e2-d995c9fb5c66" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/exception/FunctionalException.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/exception/FunctionalException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/global/AuthRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/global/AuthRest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/service/KeycloakRegistrationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/service/KeycloakRegistrationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-persistence/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-persistence/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,13 +17,18 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
+        <option value="AnnotationType" />
+        <option value="com.intellij.jpb.JpaEntity" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="isToolWindowVisible" value="false" />
   </component>
   <component name="OptimizeOnSaveOptions">
     <option name="myRunOnSave" value="true" />
@@ -69,6 +73,11 @@
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="fr.esgi.persistence.entity" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="CoHabitApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="co-habit-application" />
@@ -88,8 +97,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.24807.4" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.24807.4" />
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
       </set>
     </attachedChunks>
   </component>
@@ -120,11 +129,6 @@
           <url>file://$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/interne/ProfileRest.java</url>
           <line>33</line>
           <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/config/SecurityConfig.java</url>
-          <line>54</line>
-          <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/exception/SecurityExceptionHandler.java</url>
