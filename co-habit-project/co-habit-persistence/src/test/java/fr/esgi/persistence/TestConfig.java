@@ -1,4 +1,4 @@
-package fr.esgi.persistence.integration;
+package fr.esgi.persistence;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
-@EntityScan("fr.esgi")
-@EnableJpaRepositories("fr.esgi.persistence")
+@EntityScan("fr.esgi.persistence.entity")
+@EnableJpaRepositories("fr.esgi.persistence.repository")
 @ComponentScan("fr.esgi.persistence")
 public class TestConfig {
     // This is empty on purpose
