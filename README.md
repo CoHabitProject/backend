@@ -54,6 +54,37 @@ cd backend
 docker-compose up -d
 ```
 
+## Environnement de développement local
+
+Le projet inclut une configuration Docker Compose légère pour le développement local, qui fournit :
+
+- **Keycloak** : Un fournisseur OpenID Connect disponible sur le port 8088
+  - Realm "co-habit" préconfiguré avec le client "co-habit-confidential"
+  - Identifiants admin : nom d'utilisateur : admin, mot de passe : admin
+  - Secret client : "secret"
+
+- **PostgreSQL** : Serveur de base de données sur le port 5432
+  - Deux bases de données configurées :
+    - `keycloak` : Utilisée par le service Keycloak
+    - `cohabit` : Utilisée par l'application
+  - Détails de connexion pour l'application :
+    - URL : jdbc:postgresql://localhost:5432/cohabit
+    - Nom d'utilisateur : cohabit
+    - Mot de passe : password
+
+### Démarrer l'environnement
+
+```bash
+# Démarrer tous les conteneurs
+docker-compose up -d
+
+# Arrêter tous les conteneurs
+docker-compose down
+
+# Afficher les logs
+docker-compose logs -f
+```
+
 ## Configuration
 
 Le fichier `application.properties` (ou `application.yml`) se trouve dans le module `co-habit-application/src/main/resources`.

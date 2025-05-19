@@ -1,6 +1,5 @@
-package fr.esgi.persistence.repository;
+package fr.esgi.persistence;
 
-import fr.esgi.persistence.TestConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
