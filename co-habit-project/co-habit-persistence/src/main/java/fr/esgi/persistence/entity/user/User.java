@@ -1,10 +1,11 @@
-package fr.esgi.persistence.entity;
+package fr.esgi.persistence.entity.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,23 +17,39 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue
-    private Long                  id;
+    private Long id;
+
     @Column(unique = true)
-    private String                keyCloakSub;
+    private String keyCloakSub;
+
     @Column(unique = true)
-    private String                email;
-    private String                firstName;
-    private String                lastName;
+    private String email;
+
+    @Column(unique = true)
+    private String username;
+
+    private String firstName;
+    private String lastName;
+    private String fullName;
+
+    @Column(columnDefinition = "DATE")
+    private LocalDate birthDate;
+
+    private String gender;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserContact> contacts = new HashSet<>();
+
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private Set<UserRelationship> children = new HashSet<>();
 
     @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserRelationship> parents = new HashSet<>();
 
-    public User(String firstName,
-                String lastName) {
+    public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName  = lastName;
+        this.fullName  = firstName + " " + lastName;
     }
 
     public void addChild(User child) {
@@ -49,5 +66,15 @@ public class User {
         child.getParents()
              .removeIf(r -> r.getParent()
                              .equals(this));
+    }
+
+    public void addContact(UserContact contact) {
+        contacts.add(contact);
+        contact.setUser(this);
+    }
+
+    public void removeContact(UserContact contact) {
+        contacts.remove(contact);
+        contact.setUser(null);
     }
 }

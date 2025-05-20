@@ -1,4 +1,4 @@
-package fr.esgi.persistence.entity;
+package fr.esgi.persistence.entity.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;

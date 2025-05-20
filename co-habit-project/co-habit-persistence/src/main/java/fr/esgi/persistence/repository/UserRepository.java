@@ -1,6 +1,6 @@
 package fr.esgi.persistence.repository;
 
-import fr.esgi.persistence.entity.User;
+import fr.esgi.persistence.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

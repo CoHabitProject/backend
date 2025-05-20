@@ -48,6 +48,7 @@
         <module>co-habit-security</module>
         <module>co-habit-domain</module>
         <module>co-habit-persistence</module>
+        <module>co-habit-service</module>
     </modules>
 
     <properties>
