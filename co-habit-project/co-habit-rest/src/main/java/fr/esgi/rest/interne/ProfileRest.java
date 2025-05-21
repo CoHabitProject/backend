@@ -1,6 +1,6 @@
 package fr.esgi.rest.interne;
 
-import fr.esgi.rest.dto.user.UserProfileDto;
+import fr.esgi.domain.dto.user.UserProfileDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

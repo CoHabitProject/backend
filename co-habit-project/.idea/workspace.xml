@@ -5,8 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="304ed2b1-7377-4180-b3e2-d995c9fb5c66" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jpa.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jpa.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-persistence/src/test/java/fr/esgi/persistence/integration/TestConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-persistence/src/test/java/fr/esgi/persistence/TestConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-application/src/main/java/fr/esgi/CoHabitApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-application/src/main/java/fr/esgi/CoHabitApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-persistence/src/main/java/fr/esgi/persistence/entity/user/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-persistence/src/main/java/fr/esgi/persistence/entity/user/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-persistence/src/main/java/fr/esgi/persistence/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-persistence/src/main/java/fr/esgi/persistence/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/dto/auth/LoginReqDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/dto/auth/LoginReqDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/dto/auth/RefreshReqDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/dto/auth/RefreshReqDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/dto/auth/RegisterReqDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/dto/auth/RegisterReqDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/dto/user/UserProfileDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/dto/user/UserProfileDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/global/AuthRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/global/AuthRest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/interne/ProfileRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/interne/ProfileRest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/config/JacksonConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/service/KeycloakRegistrationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/service/KeycloakRegistrationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/Main.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,9 +32,10 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Class" />
         <option value="AnnotationType" />
         <option value="com.intellij.jpb.JpaEntity" />
+        <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -50,9 +66,11 @@
     "JUnit.UserRepositoryLocalDbTest.shouldCreateParentChildRelationship.executor": "Debug",
     "JUnit.UserRepositoryLocalDbTest.shouldFindAllParentsWithConfirmedRelationships.executor": "Run",
     "JUnit.UserRepositoryLocalDbTest.shouldSaveUser.executor": "Run",
+    "Maven.co-habit-persistence [test].executor": "Run",
     "Maven.co-habit-project [clean,install].executor": "Run",
     "Maven.co-habit-project [clean].executor": "Run",
     "Maven.co-habit-project [dependency-check:check].executor": "Run",
+    "Maven.co-habit-project [verify].executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
@@ -82,21 +100,24 @@
     <key name="CreateClassDialog.RecentsKey">
       <recent name="fr.esgi.persistence.entity" />
     </key>
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="fr.esgi.security.service" />
+    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="fr.esgi.persistence" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.UserRepositoryLocalDbTest">
+  <component name="RunManager" selected="Spring Boot.CoHabitApplication">
     <configuration name="ProfileDiagnostic" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="co-habit-persistence" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="fr.esgi.persistence.repository.*" />
+          <option name="PATTERN" value="fr.esgi.persistence.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="fr.esgi.persistence.repository" />
-      <option name="MAIN_CLASS_NAME" value="fr.esgi.persistence.repository.ProfileDiagnostic" />
+      <option name="PACKAGE_NAME" value="fr.esgi.persistence" />
+      <option name="MAIN_CLASS_NAME" value="fr.esgi.persistence.ProfileDiagnostic" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -106,7 +127,7 @@
       <module name="co-habit-persistence" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="fr.esgi.persistence.repository.*" />
+          <option name="PATTERN" value="fr.esgi.persistence.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -121,7 +142,7 @@
       <module name="co-habit-persistence" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="fr.esgi.persistence.repository.*" />
+          <option name="PATTERN" value="fr.esgi.persistence.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -136,7 +157,7 @@
       <module name="co-habit-persistence" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="fr.esgi.persistence.repository.*" />
+          <option name="PATTERN" value="fr.esgi.persistence.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -152,7 +173,7 @@
       <module name="co-habit-persistence" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="fr.esgi.persistence.repository.*" />
+          <option name="PATTERN" value="fr.esgi.persistence.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -180,10 +201,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.UserRepositoryLocalDbTest" />
-        <item itemvalue="JUnit.ProfileDiagnostic" />
-        <item itemvalue="JUnit.UserRepositoryLocalDbTest.shouldSaveUser" />
         <item itemvalue="JUnit.UserRepositoryInMemoryTest" />
+        <item itemvalue="JUnit.ProfileDiagnostic" />
+        <item itemvalue="JUnit.UserRepositoryLocalDbTest" />
+        <item itemvalue="JUnit.UserRepositoryLocalDbTest.shouldSaveUser" />
         <item itemvalue="JUnit.UserRepositoryLocalDbTest.shouldCreateParentChildRelationship" />
       </list>
     </recent_temporary>
@@ -207,6 +228,10 @@
       <workItem from="1746810921200" duration="7757000" />
       <workItem from="1746880362722" duration="692000" />
       <workItem from="1747003726809" duration="1461000" />
+      <workItem from="1747380842778" duration="2532000" />
+      <workItem from="1747648092078" duration="686000" />
+      <workItem from="1747743911695" duration="7168000" />
+      <workItem from="1747829956866" duration="3138000" />
     </task>
     <servers />
   </component>
@@ -251,7 +276,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/co-habit-persistence/src/test/java/fr/esgi/persistence/repository/UserRepositoryLocalDbTest.java</url>
-          <line>38</line>
+          <line>34</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">

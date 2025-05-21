@@ -1,4 +1,4 @@
-package fr.esgi.rest.dto.auth;
+package fr.esgi.domain.dto.auth;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

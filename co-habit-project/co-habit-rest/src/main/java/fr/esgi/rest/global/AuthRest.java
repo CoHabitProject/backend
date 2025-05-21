@@ -1,11 +1,11 @@
 package fr.esgi.rest.global;
 
+import fr.esgi.domain.dto.auth.LoginReqDto;
+import fr.esgi.domain.dto.auth.RefreshReqDto;
+import fr.esgi.domain.dto.auth.RegisterReqDto;
 import fr.esgi.domain.exception.TechnicalException;
-import fr.esgi.rest.dto.auth.LoginReqDto;
-import fr.esgi.rest.dto.auth.RefreshReqDto;
-import fr.esgi.rest.dto.auth.RegisterReqDto;
+import fr.esgi.domain.port.in.IUserService;
 import fr.esgi.security.service.KeycloakAuthService;
-import fr.esgi.security.service.KeycloakRegistrationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,10 +26,10 @@ import java.util.Map;
 @Tag(name = "Authentication", description = "API pour gérer l'authentification des utilisateurs")
 public class AuthRest {
 
-    private final KeycloakRegistrationService regService;
-    private final KeycloakAuthService         authService;
+    private final IUserService        regService;
+    private final KeycloakAuthService authService;
 
-    public AuthRest(KeycloakRegistrationService regService,
+    public AuthRest(IUserService regService,
                     KeycloakAuthService authService) {
         this.regService  = regService;
         this.authService = authService;
@@ -49,7 +49,7 @@ public class AuthRest {
     )
     public ResponseEntity<Void> register(@RequestBody RegisterReqDto dto) throws
                                                                           TechnicalException {
-        regService.register(dto.getUsername(), dto.getEmail(), dto.getPassword());
+        regService.register(dto);
         return ResponseEntity.status(201)
                              .build();
     }

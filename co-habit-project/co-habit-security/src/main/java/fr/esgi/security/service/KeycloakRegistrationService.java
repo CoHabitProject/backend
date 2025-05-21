@@ -1,7 +1,9 @@
 package fr.esgi.security.service;
 
+import fr.esgi.domain.dto.auth.RegisterReqDto;
 import fr.esgi.domain.exception.FunctionalException;
 import fr.esgi.domain.exception.TechnicalException;
+import fr.esgi.domain.port.in.IUserService;
 import fr.esgi.security.roles.UserRole;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
@@ -11,12 +13,14 @@ import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
-public class KeycloakRegistrationService {
+public class KeycloakRegistrationService implements IUserService {
 
     private final Keycloak keycloak;
     private final String   realm;
@@ -33,12 +37,17 @@ public class KeycloakRegistrationService {
                                        .realm(realm)
                                        .clientId(clientId)
                                        .clientSecret(clientSecret)
-                                       .grantType("client_credentials")
+                                       .grantType(AuthorizationGrantType.CLIENT_CREDENTIALS.getValue())
                                        .build();
     }
 
-    public void register(String username, String email, String password) throws
-                                                                         TechnicalException {
+    @Override
+    public void register(RegisterReqDto registerDto) throws
+                                                     TechnicalException {
+        String username = registerDto.getUsername();
+        String email    = registerDto.getEmail();
+        String password = registerDto.getPassword();
+
         // Check if user already exists by username
         List<UserRepresentation> existingUsers = keycloak.realm(realm)
                                                          .users()
@@ -61,6 +70,16 @@ public class KeycloakRegistrationService {
         user.setUsername(username);
         user.setEmail(email);
         user.setEnabled(true);
+        user.setFirstName(registerDto.getFirstName());
+        user.setLastName(registerDto.getLastName());
+
+        // Store additional attributes
+        Map<String, List<String>> attributes = Map.of(
+                "birthDate", List.of(registerDto.getBirthDate()),
+                "gender", List.of(registerDto.getGender()),
+                "phoneNumber", List.of(registerDto.getPhoneNumber())
+        );
+        user.setAttributes(attributes);
 
         CredentialRepresentation cred = new CredentialRepresentation();
         cred.setType(CredentialRepresentation.PASSWORD);
@@ -101,14 +120,6 @@ public class KeycloakRegistrationService {
         addRoleToUser(keycloak, realm, userId, roleName);
     }
 
-    /**
-     * Adds a role to a user
-     *
-     * @param keycloak Keycloak instance
-     * @param realm Realm name
-     * @param userId User ID
-     * @param roleName Role name to add
-     */
     protected static void addRoleToUser(Keycloak keycloak, String realm, String userId, String roleName) {
         try {
             // Get the role representation
@@ -129,13 +140,6 @@ public class KeycloakRegistrationService {
         }
     }
 
-    /**
-     * Adds a role USR2 to a user
-     *
-     * @param keycloak Keycloak instance
-     * @param realm    Realm name
-     * @param userId   User ID
-     */
     public static void promoteUserToManager(Keycloak keycloak, String realm, String userId) {
         try {
             // Get the role representation
@@ -156,13 +160,6 @@ public class KeycloakRegistrationService {
         }
     }
 
-    /**
-     * Removes a role USR2 from a user
-     *
-     * @param keycloak Keycloak instance
-     * @param realm    Realm name
-     * @param userId   User ID
-     */
     public static void demoteManagerToUser(Keycloak keycloak, String realm, String userId) {
         try {
             // Get the role representation

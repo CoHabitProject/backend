@@ -1,4 +1,4 @@
-package fr.esgi.rest.dto.user;
+package fr.esgi.domain.dto.user;
 
 
 import lombok.Builder;

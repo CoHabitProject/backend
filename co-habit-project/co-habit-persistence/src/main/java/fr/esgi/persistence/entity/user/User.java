@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,33 +18,50 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue
-    private Long id;
-
+    private Long          id;
     @Column(unique = true)
-    private String keyCloakSub;
-
+    private String        keyCloakSub;
     @Column(unique = true)
-    private String email;
-
+    private String        email;
     @Column(unique = true)
-    private String username;
-
-    private String firstName;
-    private String lastName;
-    private String fullName;
-
+    private String        username;
+    private String        firstName;
+    private String        lastName;
+    private String        fullName;
     @Column(columnDefinition = "DATE")
-    private LocalDate birthDate;
+    private LocalDate     birthDate;
+    private String        gender;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
-    private String gender;
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL, orphanRemoval = true
+    )
     private Set<UserContact> contacts = new HashSet<>();
 
-    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+    @OneToMany(
+            orphanRemoval = true
+    )
     private Set<UserRelationship> children = new HashSet<>();
 
-    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(
+            mappedBy = "child",
+            cascade = CascadeType.ALL, orphanRemoval = true
+    )
     private Set<UserRelationship> parents = new HashSet<>();
 
     public User(String firstName, String lastName) {
