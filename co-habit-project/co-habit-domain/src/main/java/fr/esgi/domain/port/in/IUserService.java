@@ -13,5 +13,5 @@ public interface IUserService {
      * @param registerDto User registration data transfer object
      * @throws TechnicalException if registration fails
      */
-    void register(RegisterReqDto registerDto) throws TechnicalException;
+    String register(RegisterReqDto registerDto) throws TechnicalException;
 }

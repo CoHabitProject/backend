@@ -18,12 +18,13 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue
-    private Long          id;
+    private Long        id;
     @Column(unique = true)
     private String        keyCloakSub;
     @Column(unique = true)
     private String        email;
     @Column(unique = true)
+    private String        phoneNumber;
     private String        username;
     private String        firstName;
     private String        lastName;

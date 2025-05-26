@@ -42,7 +42,7 @@ public class KeycloakRegistrationService implements IUserService {
     }
 
     @Override
-    public void register(RegisterReqDto registerDto) throws
+    public String register(RegisterReqDto registerDto) throws
                                                      TechnicalException {
         String username = registerDto.getUsername();
         String email    = registerDto.getEmail();
@@ -51,7 +51,7 @@ public class KeycloakRegistrationService implements IUserService {
         // Check if user already exists by username
         List<UserRepresentation> existingUsers = keycloak.realm(realm)
                                                          .users()
-                                                         .searchByEmail(username, true);
+                                                         .searchByEmail(email, true);
 
         if (!existingUsers.isEmpty()) {
             throw new TechnicalException(400, "Email for username already exists");
@@ -101,6 +101,7 @@ public class KeycloakRegistrationService implements IUserService {
             // Extract user ID from response and assign default role
             String userId = extractUserIdFromResponse(response);
             assignDefaultRole(userId, "USR1");
+            return userId;
 
         } catch (WebApplicationException e) {
             if (e.getResponse()

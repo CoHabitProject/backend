@@ -17,9 +17,9 @@ public abstract class AbstractUserServiceDecorator implements IUserService {
     }
     
     @Override
-    public void register(RegisterReqDto registerDto) throws TechnicalException {
+    public String register(RegisterReqDto registerDto) throws TechnicalException {
         // The default behavior is to delegate to the decorated service
         // Subclasses will override this method to add functionality
-        decoratedService.register(registerDto);
+        return decoratedService.register(registerDto);
     }
 }

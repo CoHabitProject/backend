@@ -3,7 +3,7 @@ package fr.esgi.service.bean;
 import fr.esgi.domain.port.in.IUserService;
 import fr.esgi.persistence.repository.UserRepository;
 import fr.esgi.security.service.KeycloakRegistrationService;
-import fr.esgi.service.registration.DatabaseUserServiceDecorator;
+import fr.esgi.service.registration.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -25,10 +25,10 @@ public class UserServiceConfigBean {
      */
     @Bean
     @Primary
-    public IUserService userService(
+    public IUserService userServiceBean(
             KeycloakRegistrationService keycloakService,
             UserRepository userRepository
     ) {
-        return new DatabaseUserServiceDecorator(keycloakService, userRepository);
+        return new UserService(keycloakService, userRepository);
     }
 }

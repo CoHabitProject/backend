@@ -5,13 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="304ed2b1-7377-4180-b3e2-d995c9fb5c66" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jpa.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jpa.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-persistence/src/test/java/fr/esgi/persistence/repository/ProfileDiagnostic.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-persistence/src/test/java/fr/esgi/persistence/ProfileDiagnostic.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-persistence/src/test/resources/application-local.yml" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-persistence/src/test/resources/application-local.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker-compose.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-application/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-application/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-application/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-application/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-domain/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-domain/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/port/in/IUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/port/in/IUserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-persistence/src/main/java/fr/esgi/persistence/entity/user/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-persistence/src/main/java/fr/esgi/persistence/entity/user/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-rest/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-rest/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/service/KeycloakRegistrationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/service/KeycloakRegistrationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/bean/UserServiceConfigBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/bean/UserServiceConfigBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/registration/AbstractUserServiceDecorator.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/registration/AbstractUserServiceDecorator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/registration/DatabaseUserServiceDecorator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/registration/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/registration/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,39 +54,39 @@
     <option name="showModules" value="false" />
     <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;JUnit.ProfileDiagnostic.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.UserRepositoryInMemoryTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.UserRepositoryLocalDbTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.UserRepositoryLocalDbTest.shouldCreateParentChildRelationship.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.UserRepositoryLocalDbTest.shouldFindAllParentsWithConfirmedRelationships.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.UserRepositoryLocalDbTest.shouldSaveUser.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.co-habit-project [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.co-habit-project [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.co-habit-project [dependency-check:check].executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Spring Boot.CoHabitApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature__create-user&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/ds/0_workspace/_IntellJ/perojet-annuel/backend/co-habit-project&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;actions.on.save&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JUnit.ProfileDiagnostic.executor": "Run",
+    "JUnit.UserRepositoryInMemoryTest.executor": "Run",
+    "JUnit.UserRepositoryLocalDbTest.executor": "Run",
+    "JUnit.UserRepositoryLocalDbTest.shouldCreateParentChildRelationship.executor": "Debug",
+    "JUnit.UserRepositoryLocalDbTest.shouldFindAllParentsWithConfirmedRelationships.executor": "Run",
+    "JUnit.UserRepositoryLocalDbTest.shouldSaveUser.executor": "Run",
+    "Maven.co-habit-project [clean,install].executor": "Run",
+    "Maven.co-habit-project [clean].executor": "Run",
+    "Maven.co-habit-project [dependency-check:check].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.CoHabitApplication.executor": "Run",
+    "git-widget-placeholder": "feature__create-user",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/ds/0_workspace/_IntellJ/perojet-annuel/backend/co-habit-project",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "actions.on.save",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -200,8 +206,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
-        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.24807.4" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.24807.4" />
       </set>
     </attachedChunks>
   </component>
@@ -220,6 +226,7 @@
       <workItem from="1747648092078" duration="686000" />
       <workItem from="1747743911695" duration="7168000" />
       <workItem from="1747829956866" duration="3138000" />
+      <workItem from="1748246651546" duration="4530000" />
     </task>
     <servers />
   </component>
@@ -266,6 +273,36 @@
           <url>file://$PROJECT_DIR$/co-habit-persistence/src/test/java/fr/esgi/persistence/repository/UserRepositoryLocalDbTest.java</url>
           <line>34</line>
           <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/registration/UserService.java</url>
+          <line>41</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/global/AuthRest.java</url>
+          <line>52</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/service/KeycloakRegistrationService.java</url>
+          <line>46</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/global/AuthRest.java</url>
+          <line>53</line>
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/global/AuthRest.java</url>
+          <line>51</line>
+          <option name="timeStamp" value="25" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/registration/UserService.java</url>
+          <line>44</line>
+          <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>jar://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-test-autoconfigure/3.4.3/spring-boot-test-autoconfigure-3.4.3.jar!/org/springframework/boot/test/autoconfigure/orm/jpa/DataJpaTest.class</url>
