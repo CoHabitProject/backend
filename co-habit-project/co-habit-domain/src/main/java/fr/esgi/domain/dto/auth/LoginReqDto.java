@@ -1,4 +1,4 @@
-package fr.esgi.rest.dto.auth;
+package fr.esgi.domain.dto.auth;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -10,15 +10,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@Schema(description = "Requête d'inscription utilisateur")
-public class RegisterReqDto {
+@Schema(description = "Requête de connexion utilisateur")
+public class LoginReqDto {
     @Schema(description = "Nom d'utilisateur", example = "john_doe")
     private String username;
-    
-    @Schema(description = "Adresse e-mail", example = "john.doe@example.com")
-    private String email;
     
     @Schema(description = "Mot de passe", example = "Password123!")
     private String password;
 }
-

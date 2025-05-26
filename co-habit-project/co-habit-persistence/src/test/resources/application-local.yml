@@ -1,0 +1,21 @@
+# H2 Database Configuration avec syntaxe PostgreSQL
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/co_habit
+    username: cohabit
+    password: password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
