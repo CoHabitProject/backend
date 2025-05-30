@@ -1,5 +1,6 @@
 package fr.esgi.persistence.entity.user;
 
+import fr.esgi.persistence.entity.space.Colocation;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long        id;
     @Column(unique = true)
     private String        keyCloakSub;
@@ -66,6 +67,13 @@ public class User {
             cascade = CascadeType.ALL, orphanRemoval = true
     )
     private Set<UserRelationship> parents = new HashSet<>();
+    
+    // Relations avec les colocations
+    @OneToMany(mappedBy = "manager", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Colocation> managedColocations = new HashSet<>();
+    
+    @ManyToMany(mappedBy = "roommates")
+    private Set<Colocation> colocations = new HashSet<>();
 
     public User(String firstName, String lastName) {
         this.firstName = firstName;
@@ -101,5 +109,26 @@ public class User {
     public void removeContact(UserContact contact) {
         contacts.remove(contact);
         contact.setUser(null);
+    }
+    
+    // Méthodes utilitaires pour les colocations
+    public void addManagedColocation(Colocation colocation) {
+        managedColocations.add(colocation);
+        colocation.setManager(this);
+    }
+    
+    public void removeManagedColocation(Colocation colocation) {
+        managedColocations.remove(colocation);
+        colocation.setManager(null);
+    }
+    
+    public void joinColocation(Colocation colocation) {
+        colocations.add(colocation);
+        colocation.addRoommate(this);
+    }
+    
+    public void leaveColocation(Colocation colocation) {
+        colocations.remove(colocation);
+        colocation.removeRoommate(this);
     }
 }
