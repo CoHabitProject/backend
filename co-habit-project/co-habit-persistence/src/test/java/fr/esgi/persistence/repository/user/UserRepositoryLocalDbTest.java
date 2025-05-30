@@ -1,4 +1,4 @@
-package fr.esgi.persistence.repository;
+package fr.esgi.persistence.repository.user;
 
 import fr.esgi.persistence.entity.user.User;
 import fr.esgi.persistence.entity.user.UserRelationship;

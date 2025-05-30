@@ -1,4 +1,4 @@
-package fr.esgi.security.roles;
+package fr.esgi.domain.roles;
 
 public enum UserRole {
     USR1("Utilisateur standard"),

@@ -1,0 +1,146 @@
+diff --git a/co-habit-project/.idea/workspace.xml b/co-habit-project/.idea/workspace.xml
+index 6f1b3cd..5b9e705 100644
+--- a/co-habit-project/.idea/workspace.xml
++++ b/co-habit-project/.idea/workspace.xml
+@@ -6,18 +6,8 @@
+   <component name="ChangeListManager">
+     <list default="true" id="304ed2b1-7377-4180-b3e2-d995c9fb5c66" name="Changes" comment="">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/co-habit-application/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-application/pom.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/co-habit-application/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-application/src/main/resources/application.yml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/co-habit-domain/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-domain/pom.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/port/in/IUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/port/in/IUserService.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/co-habit-persistence/src/main/java/fr/esgi/persistence/entity/user/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-persistence/src/main/java/fr/esgi/persistence/entity/user/User.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/co-habit-rest/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-rest/pom.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/service/KeycloakRegistrationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/service/KeycloakRegistrationService.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/bean/UserServiceConfigBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/bean/UserServiceConfigBean.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/registration/AbstractUserServiceDecorator.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/registration/AbstractUserServiceDecorator.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/registration/DatabaseUserServiceDecorator.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/registration/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/registration/UserService.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/config/SecurityConfig.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -72,7 +62,7 @@
+     "RunOnceActivity.ShowReadmeOnStart": "true",
+     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+     "Spring Boot.CoHabitApplication.executor": "Run",
+-    "git-widget-placeholder": "feature__create-user",
++    "git-widget-placeholder": "feature__cors-config",
+     "kotlin-language-version-configured": "true",
+     "last_opened_file_path": "/home/ds/0_workspace/_IntellJ/perojet-annuel/backend/co-habit-project",
+     "node.js.detected.package.eslint": "true",
+@@ -307,7 +297,7 @@
+         <line-breakpoint enabled="true" type="java-method">
+           <url>jar://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-test-autoconfigure/3.4.3/spring-boot-test-autoconfigure-3.4.3.jar!/org/springframework/boot/test/autoconfigure/orm/jpa/DataJpaTest.class</url>
+           <line>44</line>
+-          <properties class="org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest" method="properties">
++          <properties class="org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest">
+             <option name="EMULATED" value="true" />
+             <option name="WATCH_EXIT" value="false" />
+           </properties>
+diff --git a/co-habit-project/co-habit-application/src/main/resources/application.yml b/co-habit-project/co-habit-application/src/main/resources/application.yml
+index ce28db6..0540edb 100644
+--- a/co-habit-project/co-habit-application/src/main/resources/application.yml
++++ b/co-habit-project/co-habit-application/src/main/resources/application.yml
+@@ -30,6 +30,13 @@ spring:
+         dialect: org.hibernate.dialect.PostgreSQLDialect
+     show-sql: true
+ 
++# Configuration CORS
++cors:
++  allowed-origins: ${CORS_ALLOWED_ORIGINS:*}
++  allowed-methods: ${CORS_ALLOWED_METHODS:GET,POST,PUT,DELETE,OPTIONS,PATCH}
++  allowed-headers: ${CORS_ALLOWED_HEADERS:*}
++  allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
++
+ springdoc:
+   api-docs:
+     path: /v3/api-docs
+diff --git a/co-habit-project/co-habit-security/src/main/java/fr/esgi/security/config/CorsConfig.java b/co-habit-project/co-habit-security/src/main/java/fr/esgi/security/config/CorsConfig.java
+new file mode 100644
+index 0000000..6b9651d
+--- /dev/null
++++ b/co-habit-project/co-habit-security/src/main/java/fr/esgi/security/config/CorsConfig.java
+@@ -0,0 +1,50 @@
++package fr.esgi.security.config;
++
++import org.springframework.beans.factory.annotation.Value;
++import org.springframework.context.annotation.Bean;
++import org.springframework.context.annotation.Configuration;
++import org.springframework.web.cors.CorsConfiguration;
++import org.springframework.web.cors.CorsConfigurationSource;
++import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
++
++import java.util.Arrays;
++
++@Configuration
++public class CorsConfig {
++
++    @Value("${cors.allowed-origins}")
++    private String allowedOrigins;
++
++    @Value("${cors.allowed-methods}")
++    private String allowedMethods;
++
++    @Value("${cors.allowed-headers}")
++    private String allowedHeaders;
++
++    @Value("${cors.allow-credentials}")
++    private Boolean allowCredentials;
++
++    @Bean
++    public CorsConfigurationSource corsConfigurationSource() {
++        CorsConfiguration configuration = new CorsConfiguration();
++        
++        // Configuration dynamique depuis les variables
++        if ("*".equals(allowedOrigins)) {
++            configuration.setAllowedOriginPatterns(Arrays.asList("*"));
++        } else {
++            configuration.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
++        }
++        
++        configuration.setAllowedMethods(Arrays.asList(allowedMethods.split(",")));
++        configuration.setAllowedHeaders(Arrays.asList(allowedHeaders.split(",")));
++        configuration.setAllowCredentials(allowCredentials);
++        
++        // Exposer les headers de réponse
++        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
++        
++        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
++        source.registerCorsConfiguration("/**", configuration);
++        
++        return source;
++    }
++}
+diff --git a/co-habit-project/co-habit-security/src/main/java/fr/esgi/security/config/SecurityConfig.java b/co-habit-project/co-habit-security/src/main/java/fr/esgi/security/config/SecurityConfig.java
+index 08b36cd..546ce54 100644
+--- a/co-habit-project/co-habit-security/src/main/java/fr/esgi/security/config/SecurityConfig.java
++++ b/co-habit-project/co-habit-security/src/main/java/fr/esgi/security/config/SecurityConfig.java
+@@ -10,6 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
+ import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+ import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+ import org.springframework.security.web.SecurityFilterChain;
++import org.springframework.web.cors.CorsConfigurationSource;
+ 
+ @Configuration
+ @EnableWebSecurity
+@@ -19,6 +20,9 @@ public class SecurityConfig {
+     @Autowired
+     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+ 
++    @Autowired
++    private CorsConfigurationSource corsConfigurationSource; // Injectez la configuration CORS
++
+     private static final String[] SWAGGER_WHITELIST = {
+             "/v3/api-docs/**",
+             "/swagger-ui/**",
+@@ -30,6 +34,7 @@ public class SecurityConfig {
+     @Bean
+     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+         http
++                .cors(cors -> cors.configurationSource(corsConfigurationSource)) // Ajoutez cette ligne
+                 .csrf(csrf -> csrf.disable())
+                 .authorizeHttpRequests(auth -> auth
+                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
