@@ -7,15 +7,16 @@ import lombok.Setter;
 
 @Entity
 @Table(
-        name = "user_relationships",
-        uniqueConstraints = @UniqueConstraint(
-                columnNames = {
-                        "parent_id",
-                        "child_id"
-                }
-        )
+    name = "user_relationships",
+    uniqueConstraints = @UniqueConstraint(
+        columnNames = {
+                "parent_id",
+                "child_id"
+        }
+    )
 )
 @Getter
+@Setter
 @NoArgsConstructor
 public class UserRelationship {
     @Id
