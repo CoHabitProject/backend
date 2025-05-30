@@ -6,18 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="304ed2b1-7377-4180-b3e2-d995c9fb5c66" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-application/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-application/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/co-habit-application/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-application/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-domain/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-domain/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/port/in/IUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/port/in/IUserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-persistence/src/main/java/fr/esgi/persistence/entity/user/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-persistence/src/main/java/fr/esgi/persistence/entity/user/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-rest/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-rest/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/service/KeycloakRegistrationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/service/KeycloakRegistrationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/bean/UserServiceConfigBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/bean/UserServiceConfigBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/registration/AbstractUserServiceDecorator.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/registration/AbstractUserServiceDecorator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/registration/DatabaseUserServiceDecorator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/registration/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/registration/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/config/SecurityConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +62,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.CoHabitApplication.executor": "Run",
-    "git-widget-placeholder": "feature__create-user",
+    "git-widget-placeholder": "feature__cors-config",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/home/ds/0_workspace/_IntellJ/perojet-annuel/backend/co-habit-project",
     "node.js.detected.package.eslint": "true",
@@ -307,7 +297,7 @@
         <line-breakpoint enabled="true" type="java-method">
           <url>jar://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-test-autoconfigure/3.4.3/spring-boot-test-autoconfigure-3.4.3.jar!/org/springframework/boot/test/autoconfigure/orm/jpa/DataJpaTest.class</url>
           <line>44</line>
-          <properties class="org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest" method="properties">
+          <properties class="org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>
