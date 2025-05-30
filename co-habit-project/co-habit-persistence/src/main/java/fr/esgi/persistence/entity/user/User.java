@@ -55,7 +55,9 @@ public class User {
     private Set<UserContact> contacts = new HashSet<>();
 
     @OneToMany(
-            orphanRemoval = true
+            mappedBy = "parent",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL
     )
     private Set<UserRelationship> children = new HashSet<>();
 
@@ -72,12 +74,16 @@ public class User {
     }
 
     public void addChild(User child) {
-        UserRelationship rel = new UserRelationship(this, child);
-        rel.setParentConfirmed(true);
-        children.add(rel);
-        child.getParents()
-             .add(rel);
+        boolean alreadyExists = this.children.stream()
+                .anyMatch(r -> r.getChild().equals(child));
+        if (!alreadyExists) {
+            UserRelationship rel = new UserRelationship(this, child);
+            rel.setParentConfirmed(true);
+            this.children.add(rel);
+            child.getParents().add(rel);
+        }
     }
+
 
     public void removeChild(User child) {
         children.removeIf(r -> r.getChild()

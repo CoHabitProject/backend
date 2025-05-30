@@ -25,10 +25,10 @@ public class UserContact {
     private ContactType contactType;
     
     @Column(nullable = false)
-    private String value;
+    private String contactValue;
     
-    public UserContact(ContactType contactType, String value) {
+    public UserContact(ContactType contactType, String contactValue) {
         this.contactType = contactType;
-        this.value = value;
+        this.contactValue = contactValue;
     }
 }

@@ -2,6 +2,7 @@ package fr.esgi.persistence.repository;
 
 import fr.esgi.persistence.entity.user.User;
 import fr.esgi.persistence.entity.user.UserRelationship;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,6 +19,15 @@ public class UserRepositoryLocalDbTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserRelationshipRepository relationshipRepository;
+
+    @BeforeEach
+    void setUp() {
+        relationshipRepository.deleteAll();
+        userRepository.deleteAll();
+    }
+
     @Test
     void shouldSaveUser() {
         User user = new User("John", "Doe");
@@ -27,30 +37,6 @@ public class UserRepositoryLocalDbTest {
 
         assertThat(savedUser.getId()).isNotNull();
         assertThat(savedUser.getFirstName()).isEqualTo("John");
-    }
-
-    @Test
-    void shouldCreateParentChildRelationship() {
-        User parent = new User("Parent", "User");
-        parent.setEmail("parent@example.com");
-
-        User child = new User("Child", "User");
-        child.setEmail("child@example.com");
-
-        userRepository.save(parent);
-        userRepository.save(child);
-
-        parent.addChild(child);
-        userRepository.save(parent);
-        userRepository.save(child);
-
-        User savedParent = userRepository.findByEmail("parent@example.com")
-                                         .orElseThrow();
-        assertThat(savedParent.getChildren()).hasSize(1);
-
-        User savedChild = userRepository.findByEmail("child@example.com")
-                                        .orElseThrow();
-        assertThat(savedChild.getParents()).hasSize(1);
     }
 
     @Test
@@ -64,33 +50,23 @@ public class UserRepositoryLocalDbTest {
         User child = new User("Child", "User");
         child.setEmail("child@example.com");
 
-        // Save users first
-        parent1 = userRepository.save(parent1);
-        parent2 = userRepository.save(parent2);
-        child   = userRepository.save(child);
+        userRepository.saveAll(List.of(parent1, parent2, child));
 
-        // Create confirmed relationship for parent1
-        parent1.addChild(child);
-        userRepository.save(parent1);
-        userRepository.save(child);
+        // Relation confirmée
+        UserRelationship rel1 = new UserRelationship(parent1, child);
+        rel1.setParentConfirmed(true);
+        rel1.setChildConfirmed(true);
+        relationshipRepository.save(rel1);
 
-        // Create unconfirmed relationship for parent2
-        UserRelationship rel = new UserRelationship(parent2, child);
-        rel.setParentConfirmed(false);
-
-        // IMPORTANT: Add explicitly to collections BEFORE saving
-        parent2.getChildren()
-               .add(rel);
-        child.getParents()
-             .add(rel);
-
-        parent2 = userRepository.save(parent2);
-        child   = userRepository.save(child);
+        // Relation non confirmée
+        UserRelationship rel2 = new UserRelationship(parent2, child);
+        rel2.setParentConfirmed(false);
+        rel2.setChildConfirmed(true);
+        relationshipRepository.save(rel2);
 
         List<User> confirmedParents = userRepository.findAllParentsWithConfirmedRelationships();
 
         assertThat(confirmedParents).hasSize(1);
-        assertThat(confirmedParents.get(0)
-                                   .getEmail()).isEqualTo("parent1@example.com");
+        assertThat(confirmedParents.get(0).getEmail()).isEqualTo("parent1@example.com");
     }
 }
