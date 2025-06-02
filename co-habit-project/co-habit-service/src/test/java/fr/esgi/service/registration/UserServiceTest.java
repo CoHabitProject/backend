@@ -4,7 +4,7 @@ import fr.esgi.domain.dto.auth.RegisterReqDto;
 import fr.esgi.domain.exception.TechnicalException;
 import fr.esgi.domain.port.in.IUserService;
 import fr.esgi.persistence.entity.user.User;
-import fr.esgi.persistence.repository.UserRepository;
+import fr.esgi.persistence.repository.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -12,7 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 class UserServiceTest {
