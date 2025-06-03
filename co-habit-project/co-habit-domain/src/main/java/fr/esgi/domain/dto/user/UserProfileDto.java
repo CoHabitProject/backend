@@ -1,17 +1,35 @@
 package fr.esgi.domain.dto.user;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserProfileDto {
-    private String       id;
+    /*private String       id;
     private String       username;
     private String       email;
     private boolean      emailVerified;
-    private List<String> roles;
+    private List<String> roles;*/
+    private Long          id;
+    private String        keyCloakSub;
+    private String        email;
+    private String        phoneNumber;
+    private String        username;
+    private String        firstName;
+    private String        lastName;
+    private String        fullName;
+    private String        birthDate;
+    private String        gender;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

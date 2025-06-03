@@ -1,49 +1,44 @@
 package fr.esgi.security.service;
 
 import fr.esgi.domain.dto.auth.RegisterReqDto;
+import fr.esgi.domain.dto.user.UserProfileDto;
 import fr.esgi.domain.exception.FunctionalException;
 import fr.esgi.domain.exception.TechnicalException;
 import fr.esgi.domain.port.in.IUserService;
-import fr.esgi.security.roles.UserRole;
+import fr.esgi.domain.roles.UserRole;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
+import lombok.extern.log4j.Log4j2;
 import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Log4j2
 public class KeycloakRegistrationService implements IUserService {
 
     private final Keycloak keycloak;
     private final String   realm;
 
+    @Autowired
     public KeycloakRegistrationService(
-            @Value("${keycloak.auth-server-url}") String serverUrl,
-            @Value("${keycloak.realm}") String realm,
-            @Value("${keycloak.client.registration.id}") String clientId,
-            @Value("${keycloak.client.registration.secret}") String clientSecret
+            Keycloak keycloak,
+            @Value("${keycloak.realm}") String realm
     ) {
         this.realm    = realm;
-        this.keycloak = KeycloakBuilder.builder()
-                                       .serverUrl(serverUrl)
-                                       .realm(realm)
-                                       .clientId(clientId)
-                                       .clientSecret(clientSecret)
-                                       .grantType(AuthorizationGrantType.CLIENT_CREDENTIALS.getValue())
-                                       .build();
+        this.keycloak = keycloak;
     }
 
     @Override
     public String register(RegisterReqDto registerDto) throws
-                                                     TechnicalException {
+                                                       TechnicalException {
         String username = registerDto.getUsername();
         String email    = registerDto.getEmail();
         String password = registerDto.getPassword();
@@ -54,7 +49,7 @@ public class KeycloakRegistrationService implements IUserService {
                                                          .searchByEmail(email, true);
 
         if (!existingUsers.isEmpty()) {
-            throw new TechnicalException(400, "Email for username already exists");
+            throw new TechnicalException(400, "Email for username already exists in identity provider");
         }
 
         // Check if user already exists by email
@@ -112,13 +107,61 @@ public class KeycloakRegistrationService implements IUserService {
         }
     }
 
+    @Override
+    public UserProfileDto getUserProfile() throws
+                                           TechnicalException {
+        log.info("getUserProfile() called without Keycloak sub. This method is not implemented. \n Use getUserProfile(String keycloakSub) instead.");
+        throw new TechnicalException(501, "Server error");
+    }
+
+    @Override
+    public UserProfileDto getUserProfile(String keycloakSub) throws
+                                                             TechnicalException {
+        try {
+            UserRepresentation userRepresentation = keycloak.realm(realm)
+                                                            .users()
+                                                            .get(keycloakSub)
+                                                            .toRepresentation();
+
+            if (userRepresentation == null) {
+                throw new TechnicalException(404, "User not found in Keycloak");
+            }
+
+            return UserProfileDto.builder()
+                                 .keyCloakSub(userRepresentation.getId())
+                                 .username(userRepresentation.getUsername())
+                                 .email(userRepresentation.getEmail())
+                                 .firstName(userRepresentation.getFirstName())
+                                 .lastName(userRepresentation.getLastName())
+                                 .fullName(userRepresentation.getFirstName() + " " + userRepresentation.getLastName())
+                                 .birthDate(getAttributeValue(userRepresentation, "birthDate"))
+                                 .gender(getAttributeValue(userRepresentation, "gender"))
+                                 .phoneNumber(getAttributeValue(userRepresentation, "phoneNumber"))
+                                 .build();
+
+        } catch (Exception e) {
+            log.error("Failed to retrieve user profile for Keycloak sub: {}, {}", keycloakSub, e);
+            throw new TechnicalException(500, "Failed to retrieve user profile from Keycloak");
+        }
+    }
+
+    private String getAttributeValue(UserRepresentation user, String attributeName) {
+        if (user.getAttributes() != null && user.getAttributes()
+                                                .containsKey(attributeName)) {
+            List<String> values = user.getAttributes()
+                                      .get(attributeName);
+            return values != null && !values.isEmpty() ? values.get(0) : null;
+        }
+        return null;
+    }
+
     private String extractUserIdFromResponse(Response response) {
         String locationHeader = response.getHeaderString("Location");
         return locationHeader.substring(locationHeader.lastIndexOf("/") + 1);
     }
 
     private void assignDefaultRole(String userId, String roleName) {
-        addRoleToUser(keycloak, realm, userId, roleName);
+        addRoleToUser(this.keycloak, realm, userId, roleName);
     }
 
     protected static void addRoleToUser(Keycloak keycloak, String realm, String userId, String roleName) {

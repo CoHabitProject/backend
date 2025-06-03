@@ -1,11 +1,12 @@
 package fr.esgi.service.registration;
 
 import fr.esgi.domain.dto.auth.RegisterReqDto;
+import fr.esgi.domain.dto.user.UserProfileDto;
 import fr.esgi.domain.exception.TechnicalException;
 import fr.esgi.domain.port.in.IUserService;
-import fr.esgi.domain.util.DateUtils;
 import fr.esgi.persistence.entity.user.User;
-import fr.esgi.persistence.repository.UserRepository;
+import fr.esgi.persistence.repository.user.UserRepository;
+import fr.esgi.service.mapper.UserMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,13 +21,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService extends AbstractUserServiceDecorator {
 
     private final UserRepository userRepository;
+    private final UserMapper     userMapper;
 
     public UserService(
             IUserService keycloakRegistrationService,  // This will be autowired with KeycloakRegistrationService
-            UserRepository userRepository
+            UserRepository userRepository,
+            UserMapper userMapper
     ) {
         super(keycloakRegistrationService);
         this.userRepository = userRepository;
+        this.userMapper     = userMapper;
     }
 
     /**
@@ -40,36 +44,31 @@ public class UserService extends AbstractUserServiceDecorator {
     @Transactional
     public String register(RegisterReqDto registerDto) throws
                                                        TechnicalException {
-        // First, delegate to the decorated service (Keycloak registration)
         String userKeycloakId = super.register(registerDto);
 
-        // Then save the user details in our database with id from KeyCloak
-        User user = mapDtoToUser(userKeycloakId, registerDto);
+        User user = userMapper.mapDtoToUser(userKeycloakId, registerDto);
         userRepository.save(user);
         log.info("User avec id était créer : {}", userKeycloakId);
 
         return userKeycloakId;
     }
 
-    /**
-     * Maps registration DTO to User entity
-     *
-     * @param dto Registration data transfer object
-     * @return User entity ready to be persisted
-     */
-    private User mapDtoToUser(String userKeycloakId,
-                              RegisterReqDto dto) throws
-                                                  TechnicalException {
-        User user = new User();
-        user.setKeyCloakSub(userKeycloakId);
-        user.setUsername(dto.getUsername());
-        user.setEmail(dto.getEmail());
-        user.setFullName(dto.getFullName());
-        user.setFirstName(dto.getFirstName());
-        user.setLastName(dto.getLastName());
-        user.setGender(dto.getGender());
-        user.setBirthDate(DateUtils.stringToLocalDate(dto.getBirthDate()));
-        user.setPhoneNumber(dto.getPhoneNumber());
-        return user;
+    @Override
+    public UserProfileDto getUserProfile() throws
+                                           TechnicalException {
+        String keycloakSub = super.getJwtAuthentication()
+                                  .getName();  // This is the subject (sub) claim
+
+        User user = userRepository.findByKeyCloakSub(keycloakSub)
+                                  .orElseThrow(() -> new TechnicalException(404, "User not found"));
+        UserProfileDto userProfileDto = userMapper.mapUserToProfileDto(user);
+        return userProfileDto;
+    }
+
+    @Override
+    public UserProfileDto getUserProfile(String keycloakSub) throws
+                                                             TechnicalException {
+        log.info("Use withouth keycloakSub");
+        throw new TechnicalException(501, "Server error - This method is not implemented");
     }
 }

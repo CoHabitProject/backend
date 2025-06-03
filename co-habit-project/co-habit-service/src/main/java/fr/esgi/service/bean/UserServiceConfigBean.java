@@ -1,8 +1,9 @@
 package fr.esgi.service.bean;
 
 import fr.esgi.domain.port.in.IUserService;
-import fr.esgi.persistence.repository.UserRepository;
+import fr.esgi.persistence.repository.user.UserRepository;
 import fr.esgi.security.service.KeycloakRegistrationService;
+import fr.esgi.service.mapper.UserMapper;
 import fr.esgi.service.registration.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,8 +28,9 @@ public class UserServiceConfigBean {
     @Primary
     public IUserService userServiceBean(
             KeycloakRegistrationService keycloakService,
-            UserRepository userRepository
+            UserRepository userRepository,
+            UserMapper userMapper
     ) {
-        return new UserService(keycloakService, userRepository);
+        return new UserService(keycloakService, userRepository, userMapper);
     }
 }

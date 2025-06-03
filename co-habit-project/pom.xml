@@ -159,6 +159,10 @@
                     <version>3.2.5</version>
                     <configuration>
                         <excludedGroups>integration</excludedGroups>
+                        <excludes>
+                            <exclude>**/*LocalTest.java</exclude>
+                            <exclude>**/*IntegrationTest.java</exclude>
+                        </excludes>
                     </configuration>
                 </plugin>
                 

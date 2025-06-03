@@ -30,6 +30,14 @@ public class KeycloakAuthService {
         this.webClient = WebClient.builder().build();
     }
 
+    // For testing only
+    public KeycloakAuthService(WebClient webClient, String tokenEndpoint, String clientId, String clientSecret) {
+        this.tokenEndpoint = tokenEndpoint;
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
+        this.webClient = webClient;
+    }
+
     public Mono<Map<String, Object>> login(String username, String password) {
         return webClient.post()
                         .uri(tokenEndpoint)
