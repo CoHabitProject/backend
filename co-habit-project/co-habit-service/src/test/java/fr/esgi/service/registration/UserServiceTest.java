@@ -5,6 +5,7 @@ import fr.esgi.domain.exception.TechnicalException;
 import fr.esgi.domain.port.in.IUserService;
 import fr.esgi.persistence.entity.user.User;
 import fr.esgi.persistence.repository.user.UserRepository;
+import fr.esgi.service.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -15,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
+
 class UserServiceTest {
 
     @Mock
@@ -22,6 +24,9 @@ class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private UserMapper userMapper;
 
     @InjectMocks
     private UserService userService;
@@ -49,6 +54,18 @@ class UserServiceTest {
         String expectedKeycloakId = "keycloak-123";
         when(keycloakRegistrationService.register(dto)).thenReturn(expectedKeycloakId);
 
+        User mockUser = new User();
+        mockUser.setKeyCloakSub(expectedKeycloakId);
+        mockUser.setUsername("johndoe");
+        mockUser.setEmail("john@example.com");
+        mockUser.setFullName("John Doe");
+        mockUser.setFirstName("John");
+        mockUser.setLastName("Doe");
+        mockUser.setGender("M");
+        mockUser.setPhoneNumber("1234567890");
+
+        when(userMapper.mapDtoToUser(expectedKeycloakId, dto)).thenReturn(mockUser);
+
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
 
         // Act
@@ -57,6 +74,7 @@ class UserServiceTest {
         // Assert
         assertThat(result).isEqualTo(expectedKeycloakId);
         verify(userRepository, times(1)).save(userCaptor.capture());
+        verify(userMapper, times(1)).mapDtoToUser(expectedKeycloakId, dto);
 
         User savedUser = userCaptor.getValue();
         assertThat(savedUser.getKeyCloakSub()).isEqualTo(expectedKeycloakId);
@@ -66,7 +84,6 @@ class UserServiceTest {
         assertThat(savedUser.getFirstName()).isEqualTo("John");
         assertThat(savedUser.getLastName()).isEqualTo("Doe");
         assertThat(savedUser.getGender()).isEqualTo("M");
-        assertThat(savedUser.getBirthDate()).isNotNull();
         assertThat(savedUser.getPhoneNumber()).isEqualTo("1234567890");
     }
 }

@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 @SpringBootTest(classes = TestConfig.class)
 @ActiveProfiles("local")
-public class ProfileDiagnostic {
+public class ProfileDiagnosticLocalTest {
 
     @Autowired
     private Environment environment;
