@@ -1,79 +1,78 @@
 package fr.esgi.security.service;
 
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.io.IOException;
 import java.util.Map;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 class KeycloakAuthServiceTest {
 
-    @Mock
-    private WebClient.Builder webClientBuilder;
-
-    @Mock
-    private WebClient webClient;
-
-    @Mock
-    private WebClient.RequestBodyUriSpec uriSpec;
-
-    @Mock
-    private WebClient.RequestBodySpec bodySpec;
-
-    @Mock
-    private WebClient.RequestHeadersSpec<?> headersSpec;
-
-    @Mock
-    private WebClient.ResponseSpec responseSpec;
-
-    @InjectMocks
+    private static MockWebServer mockWebServer;
     private KeycloakAuthService keycloakAuthService;
 
-    private final String tokenUrl = "http://localhost/realms/myrealm/protocol/openid-connect/token";
+    @BeforeAll
+    static void setUp() throws IOException {
+        mockWebServer = new MockWebServer();
+        mockWebServer.start(8888);
+    }
+
+    @AfterAll
+    static void tearDown() throws IOException {
+        mockWebServer.shutdown();
+    }
 
     @BeforeEach
     void setup() {
-        MockitoAnnotations.openMocks(this);
-        when(webClientBuilder.build()).thenReturn(webClient);
+        // Créer service avec les bonnes valeurs pour les tests
+        String baseUrl = "http://localhost:" + mockWebServer.getPort();
+
+        // Créer l'instance sans Spring
         keycloakAuthService = new KeycloakAuthService(
-                webClient,
-                "http://localhost/realms/myrealm/protocol/openid-connect/token",
-                "my-client",
-                "my-secret"
+                baseUrl,
+                "test-realm",
+                "test-client",
+                "test-secret"
         );
+
+        // Optionnel: remplacer le WebClient par un qui pointe vers notre mockWebServer
+        WebClient customWebClient = WebClient.builder()
+                                             .baseUrl(baseUrl)
+                                             .build();
+
+        ReflectionTestUtils.setField(keycloakAuthService, "webClient", customWebClient);
     }
 
     @Test
     void login_ShouldReturnTokens_WhenSuccessful() {
         // Given
-        Map<String, Object> expectedTokens = Map.of("access_token", "token123");
+        String jsonResponse = "{\"access_token\":\"token123\",\"refresh_token\":\"refresh123\"}";
 
-        when(webClient.post()).thenReturn(uriSpec);
-        when(uriSpec.uri(tokenUrl)).thenReturn(bodySpec);
-        when(bodySpec.contentType(MediaType.APPLICATION_FORM_URLENCODED)).thenReturn(bodySpec);
-        when(bodySpec.body(any(BodyInserters.FormInserter.class))).thenReturn(headersSpec);
-        when(headersSpec.retrieve()).thenReturn(responseSpec);
-        when(responseSpec.onStatus(any(), any())).thenReturn(responseSpec);
-        when(responseSpec.bodyToMono(any(ParameterizedTypeReference.class)))
-                .thenReturn(Mono.just(expectedTokens));
+        mockWebServer.enqueue(
+                new MockResponse()
+                        .setResponseCode(200)
+                        .addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                        .setBody(jsonResponse)
+        );
 
         // When
         Mono<Map<String, Object>> result = keycloakAuthService.login("user", "pass");
 
         // Then
         StepVerifier.create(result)
-                .expectNextMatches(tokens -> tokens.get("access_token").equals("token123"))
-                .verifyComplete();
+                    .expectNextMatches(tokens ->
+                                               "token123".equals(tokens.get("access_token")) &&
+                                                       "refresh123".equals(tokens.get("refresh_token")))
+                    .verifyComplete();
     }
 }

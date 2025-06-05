@@ -13,10 +13,11 @@ import java.util.Map;
 @Service
 public class KeycloakAuthService {
 
+
     private final WebClient webClient;
-    private final String tokenEndpoint;
-    private final String clientId;
-    private final String clientSecret;
+    private final String    tokenEndpoint;
+    private final String    clientId;
+    private final String    clientSecret;
 
     public KeycloakAuthService(
             @Value("${keycloak.auth-server-url}") String serverUrl,
@@ -25,17 +26,10 @@ public class KeycloakAuthService {
             @Value("${keycloak.client.registration.secret}") String clientSecret
     ) {
         this.tokenEndpoint = serverUrl + "/realms/" + realm + "/protocol/openid-connect/token";
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
-        this.webClient = WebClient.builder().build();
-    }
-
-    // For testing only
-    public KeycloakAuthService(WebClient webClient, String tokenEndpoint, String clientId, String clientSecret) {
-        this.tokenEndpoint = tokenEndpoint;
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
-        this.webClient = webClient;
+        this.clientId      = clientId;
+        this.clientSecret  = clientSecret;
+        this.webClient     = WebClient.builder()
+                                      .build();
     }
 
     public Mono<Map<String, Object>> login(String username, String password) {
@@ -53,10 +47,11 @@ public class KeycloakAuthService {
                         .onStatus(status -> status.is4xxClientError(),
                                   response -> response.bodyToMono(String.class)
                                                       .flatMap(error -> Mono.error(new RuntimeException("Keycloak error: " + error))))
-                        .bodyToMono(new ParameterizedTypeReference<>() {});
+                        .bodyToMono(new ParameterizedTypeReference<>() {
+                        });
     }
 
-    public Mono<Map<String,Object>> refresh(String refreshToken) {
+    public Mono<Map<String, Object>> refresh(String refreshToken) {
         return webClient.post()
                         .uri(tokenEndpoint)
                         .header("Content-Type", "application/x-www-form-urlencoded")
@@ -65,7 +60,8 @@ public class KeycloakAuthService {
                                            + "&client_secret=" + clientSecret
                                            + "&refresh_token=" + refreshToken)
                         .retrieve()
-                        .bodyToMono(new ParameterizedTypeReference<>() {});
+                        .bodyToMono(new ParameterizedTypeReference<>() {
+                        });
     }
 }
 

@@ -14,7 +14,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         "fr.esgi.security"
 })
 @EntityScan(basePackages = "fr.esgi.persistence.entity")
-@EnableJpaRepositories(basePackages = "fr.esgi.persistence.repository")
+@EnableJpaRepositories(basePackages = {
+        "fr.esgi.persistence.repository.user",
+        "fr.esgi.persistence.repository.space"
+})
 public class CoHabitRestApplication {
 
     public static void main(String[] args) {
