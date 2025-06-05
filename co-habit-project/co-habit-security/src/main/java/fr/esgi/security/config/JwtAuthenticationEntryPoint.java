@@ -2,7 +2,7 @@ package fr.esgi.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import fr.esgi.domain.dto.error.ErrorResponseDto;
+import fr.esgi.domain.dto.error.ErrorResDto;
 import fr.esgi.domain.exception.TokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -44,12 +44,12 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                 "\", error_description=\"" + tokenException.getErrorDescription() + "\"");
 
         // Créer la réponse DTO
-        ErrorResponseDto errorResponseDto = ErrorResponseDto.builder()
-                .status(tokenException.getCode())
-                .error(tokenException.getError())
-                .message(tokenException.getErrorDescription())
-                .path(request.getRequestURI())
-                .build();
+        ErrorResDto errorResponseDto = ErrorResDto.builder()
+                                                  .status(tokenException.getCode())
+                                                  .error(tokenException.getError())
+                                                  .message(tokenException.getErrorDescription())
+                                                  .path(request.getRequestURI())
+                                                  .build();
 
         // Écrire les détails d'erreur dans la réponse
         objectMapper.writeValue(response.getOutputStream(), errorResponseDto);

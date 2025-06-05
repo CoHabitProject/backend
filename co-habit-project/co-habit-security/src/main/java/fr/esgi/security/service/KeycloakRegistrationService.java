@@ -1,7 +1,7 @@
 package fr.esgi.security.service;
 
 import fr.esgi.domain.dto.auth.RegisterReqDto;
-import fr.esgi.domain.dto.user.UserProfileDto;
+import fr.esgi.domain.dto.user.UserProfileResDto;
 import fr.esgi.domain.exception.FunctionalException;
 import fr.esgi.domain.exception.TechnicalException;
 import fr.esgi.domain.port.in.IUserService;
@@ -108,14 +108,14 @@ public class KeycloakRegistrationService implements IUserService {
     }
 
     @Override
-    public UserProfileDto getUserProfile() throws
+    public UserProfileResDto getUserProfile() throws
                                            TechnicalException {
         log.info("getUserProfile() called without Keycloak sub. This method is not implemented. \n Use getUserProfile(String keycloakSub) instead.");
         throw new TechnicalException(501, "Server error");
     }
 
     @Override
-    public UserProfileDto getUserProfile(String keycloakSub) throws
+    public UserProfileResDto getUserProfile(String keycloakSub) throws
                                                              TechnicalException {
         try {
             UserRepresentation userRepresentation = keycloak.realm(realm)
@@ -127,17 +127,17 @@ public class KeycloakRegistrationService implements IUserService {
                 throw new TechnicalException(404, "User not found in Keycloak");
             }
 
-            return UserProfileDto.builder()
-                                 .keyCloakSub(userRepresentation.getId())
-                                 .username(userRepresentation.getUsername())
-                                 .email(userRepresentation.getEmail())
-                                 .firstName(userRepresentation.getFirstName())
-                                 .lastName(userRepresentation.getLastName())
-                                 .fullName(userRepresentation.getFirstName() + " " + userRepresentation.getLastName())
-                                 .birthDate(getAttributeValue(userRepresentation, "birthDate"))
-                                 .gender(getAttributeValue(userRepresentation, "gender"))
-                                 .phoneNumber(getAttributeValue(userRepresentation, "phoneNumber"))
-                                 .build();
+            return UserProfileResDto.builder()
+                                    .keyCloakSub(userRepresentation.getId())
+                                    .username(userRepresentation.getUsername())
+                                    .email(userRepresentation.getEmail())
+                                    .firstName(userRepresentation.getFirstName())
+                                    .lastName(userRepresentation.getLastName())
+                                    .fullName(userRepresentation.getFirstName() + " " + userRepresentation.getLastName())
+                                    .birthDate(getAttributeValue(userRepresentation, "birthDate"))
+                                    .gender(getAttributeValue(userRepresentation, "gender"))
+                                    .phoneNumber(getAttributeValue(userRepresentation, "phoneNumber"))
+                                    .build();
 
         } catch (Exception e) {
             log.error("Failed to retrieve user profile for Keycloak sub: {}, {}", keycloakSub, e);

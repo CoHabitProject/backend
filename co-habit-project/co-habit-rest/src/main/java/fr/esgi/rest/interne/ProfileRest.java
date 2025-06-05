@@ -1,6 +1,6 @@
 package fr.esgi.rest.interne;
 
-import fr.esgi.domain.dto.user.UserProfileDto;
+import fr.esgi.domain.dto.user.UserProfileResDto;
 import fr.esgi.domain.exception.TechnicalException;
 import fr.esgi.domain.port.in.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +37,7 @@ public class ProfileRest {
             }
     )
     @GetMapping("/profile")
-    public ResponseEntity<UserProfileDto> getUserProfile() throws
+    public ResponseEntity<UserProfileResDto> getUserProfile() throws
                                                            TechnicalException {
         return ResponseEntity.ok(userService.getUserProfile());
     }

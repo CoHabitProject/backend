@@ -1,6 +1,6 @@
 package fr.esgi.rest.interne;
 
-import fr.esgi.domain.dto.user.UserProfileDto;
+import fr.esgi.domain.dto.user.UserProfileResDto;
 import fr.esgi.domain.exception.TechnicalException;
 import fr.esgi.persistence.entity.user.User;
 import fr.esgi.persistence.repository.user.UserRepository;
@@ -43,7 +43,7 @@ class ProfileRestTest {
     private ProfileRest profileRest;
     private UserService userService;
     
-    private static final String TEST_USER_ID = "123";
+    private static final String TEST_USER_ID = "122";
     private static final String TEST_USERNAME = "johndoe";
     private static final String TEST_EMAIL = "john@example.com";
     private static final LocalDateTime TEST_CREATED_AT = LocalDateTime.now();
@@ -75,16 +75,16 @@ class ProfileRestTest {
         
         when(userRepository.findByKeyCloakSub(TEST_USER_ID)).thenReturn(Optional.of(mockUser));
         
-        UserProfileDto expectedProfile = UserProfileDto.builder()
-                .id(1L)
-                .keyCloakSub(TEST_USER_ID)
-                .username(TEST_USERNAME)
-                .email(TEST_EMAIL)
-                .firstName("John")
-                .lastName("Doe")
-                .fullName("John Doe")
-                .createdAt(TEST_CREATED_AT)
-                .build();
+        UserProfileResDto expectedProfile = UserProfileResDto.builder()
+                                                             .id(1L)
+                                                             .keyCloakSub(TEST_USER_ID)
+                                                             .username(TEST_USERNAME)
+                                                             .email(TEST_EMAIL)
+                                                             .firstName("John")
+                                                             .lastName("Doe")
+                                                             .fullName("John Doe")
+                                                             .createdAt(TEST_CREATED_AT)
+                                                             .build();
                 
         when(userMapper.mapUserToProfileDto(mockUser)).thenReturn(expectedProfile);
 
@@ -93,9 +93,9 @@ class ProfileRestTest {
 
         // Assert
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
-        assertThat(response.getBody()).isInstanceOf(UserProfileDto.class);
+        assertThat(response.getBody()).isInstanceOf(UserProfileResDto.class);
 
-        UserProfileDto user = (UserProfileDto) response.getBody();
+        UserProfileResDto user = (UserProfileResDto) response.getBody();
         assertThat(user.getId()).isEqualTo(1L);
         assertThat(user.getKeyCloakSub()).isEqualTo(TEST_USER_ID);
         assertThat(user.getUsername()).isEqualTo(TEST_USERNAME);
