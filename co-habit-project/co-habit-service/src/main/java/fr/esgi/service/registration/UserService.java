@@ -6,7 +6,7 @@ import fr.esgi.domain.exception.TechnicalException;
 import fr.esgi.domain.port.in.IUserService;
 import fr.esgi.persistence.entity.user.User;
 import fr.esgi.persistence.repository.user.UserRepository;
-import fr.esgi.service.mapper.UserMapper;
+import fr.esgi.service.registration.mapper.UserMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,9 +1,7 @@
 package fr.esgi.persistence.entity.user;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(
@@ -17,7 +15,9 @@ import lombok.Setter;
 )
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserRelationship {
     @Id
     @GeneratedValue

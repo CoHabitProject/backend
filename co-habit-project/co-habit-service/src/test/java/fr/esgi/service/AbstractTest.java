@@ -12,6 +12,8 @@ import java.util.Map;
 
 public class AbstractTest {
 
+    protected static final String TEST_USER_ID = "123";
+
     /**
      * Initializes the security context with a placeholder user for testing purposes.
      * This method sets up a mock authentication token with predefined user details.
@@ -29,7 +31,7 @@ public class AbstractTest {
         authorities.add(new SimpleGrantedAuthority("ROLE_USR1"));
         authorities.add(new SimpleGrantedAuthority("ROLE_USR2"));
 
-        final String        TEST_USER_ID    = "123";
+//        final String        TEST_USER_ID    = "123";
         final String        TEST_USERNAME   = "johndoe";
         final String        TEST_EMAIL      = "john@example.com";
         final LocalDateTime TEST_CREATED_AT = LocalDateTime.now();

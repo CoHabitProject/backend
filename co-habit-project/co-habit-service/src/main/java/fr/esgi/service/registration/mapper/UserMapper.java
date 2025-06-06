@@ -1,4 +1,4 @@
-package fr.esgi.service.mapper;
+package fr.esgi.service.registration.mapper;
 
 import fr.esgi.domain.dto.auth.RegisterReqDto;
 import fr.esgi.domain.dto.user.UserProfileResDto;
