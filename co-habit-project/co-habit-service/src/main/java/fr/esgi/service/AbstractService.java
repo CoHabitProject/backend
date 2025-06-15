@@ -20,7 +20,7 @@ public abstract class AbstractService {
     }
 
     protected JwtAuthenticationToken getJwtAuthentication() throws
-                                                          TechnicalException {
+                                                            TechnicalException {
         Authentication authentication = getAuthentication();
 
         if (authentication instanceof JwtAuthenticationToken jwtAuth) {
@@ -28,6 +28,18 @@ public abstract class AbstractService {
         } else {
             throw new TechnicalException(401, "User is not authenticated with JWT");
         }
+    }
+
+    /**
+     * Retrieves the user ID from the JWT authentication token.
+     *
+     * @return The user ID (sub) from the JWT token.
+     * @throws TechnicalException If the user is not authenticated or if there is an issue retrieving the user ID.
+     */
+    protected String getUserSub() throws
+                                  TechnicalException {
+        return this.getJwtAuthentication()
+                   .getName();
     }
 
 }

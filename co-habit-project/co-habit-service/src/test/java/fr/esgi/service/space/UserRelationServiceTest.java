@@ -10,113 +10,119 @@ import fr.esgi.persistence.repository.user.UserRelationshipRepository;
 import fr.esgi.persistence.repository.user.UserRepository;
 import fr.esgi.service.AbstractTest;
 import fr.esgi.service.space.mapper.UserRelationshipMapper;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.reactive.ReactiveWebServerFactoryAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
+@DataJpaTest
+@Import(UserRelationServiceTest.TestConfig.class)
+@TestPropertySource(
+        properties = {
+                "spring.datasource.url=jdbc:h2:mem:testdb",
+                "spring.jpa.hibernate.ddl-auto=create-drop",
+                "spring.datasource.driver-class-name=org.h2.Driver",
+                "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect"
+        }
+)
+@EnableJpaRepositories(basePackages = "fr.esgi.persistence.repository")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserRelationServiceTest extends AbstractTest {
 
-    @Mock
+    @TestConfiguration
+    @EnableAutoConfiguration(
+            exclude = {
+                    ServletWebServerFactoryAutoConfiguration.class,
+                    ReactiveWebServerFactoryAutoConfiguration.class
+            }
+    )
+    static class TestConfig {
+        @Bean
+        public UserRelationService userRelationService(
+                UserRepository userRepository,
+                UserRelationshipRepository userRelationshipRepository) {
+            return new UserRelationService(userRepository, userRelationshipRepository, UserRelationshipMapper.INSTANCE);
+        }
+    }
+
+    @Autowired
     private UserRepository userRepository;
 
-    @Mock
+    @Autowired
     private UserRelationshipRepository userRelationshipRepository;
 
-    @Mock
-    private UserRelationshipMapper userRelationshipMapper;
-
-    @InjectMocks
-    UserRelationService userRelationService;
+    @Autowired
+    private UserRelationService userRelationService;
 
     private User parentUser;
     private User childUser;
-
-    @BeforeAll
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    private User childBisUser;
 
     @BeforeEach
     public void initUsers() {
-        // Reset mocks before each test
-        reset(userRepository, userRelationshipRepository, userRelationshipMapper);
-        
         // Setup parent user
         parentUser = new User();
-        parentUser.setId(1L);
-        parentUser.setEmail("john@exemple.com");
-        parentUser.setFirstName("John");
-        parentUser.setLastName("Doe");
+        parentUser.setEmail("john-parent@exemple.com");
+        parentUser.setFirstName("John-Parent");
+        parentUser.setLastName("Doe-Parent");
         parentUser.setKeyCloakSub("parent-sub");
+        parentUser.setBirthDate(LocalDate.of(1980, 1, 1));
+
 
         // Setup child user
         childUser = new User();
-        childUser.setId(2L);
         childUser.setEmail("john-child@gmail.com");
         childUser.setFirstName("John-Child");
         childUser.setLastName("Doe-Child");
         childUser.setBirthDate(LocalDate.of(2000, 1, 1));
+
+        // Setup child bis user
+        childBisUser = new User();
+        childBisUser.setEmail("john-child-bis@gmail.com");
+        childBisUser.setFirstName("John-Child-Bis");
+        childBisUser.setLastName("Doe-Child-Bis");
+        childBisUser.setBirthDate(LocalDate.of(2001, 1, 1));
+    }
+
+    @AfterEach
+    public void cleanUp() {
+        // Clear repositories
+        userRelationshipRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
-    public void testGetUserRelations() throws TechnicalException {
+    public void testSetUserRelationsFromParent() throws
+                                                 TechnicalException {
         // Given
+        parentUser.setKeyCloakSub(TEST_USER_ID);
+        List<User> userList = List.of(parentUser, childBisUser, childUser);
+        userRepository.saveAll(userList);
+
         this.initSecurityContextPlaceHolder();
 
         UserRelationshipReqDto dto = UserRelationshipReqDto.builder()
-                .firstName("John-Child")
-                .lastName("Doe-Child")
-                .birthDate("2000-01-01")
-                .whoAmI(IUserRelationService.PARENT)
-                .build();
-
-        // Mock repository responses
-        when(userRepository.findByKeyCloakSub(anyString()))
-                .thenReturn(Optional.of(parentUser));
-        
-        when(userRepository.findByFirstNameAndLastNameAndBirthDate(
-                "John-Child", 
-                "Doe-Child", 
-                LocalDate.of(2000, 1, 1)))
-                .thenReturn(Optional.of(childUser));
-
-        UserRelationship savedRelationship = UserRelationship.builder()
-                .id(1L)
-                .parent(parentUser)
-                .child(childUser)
-                .parentConfirmed(true)
-                .childConfirmed(false)
-                .build();
-
-        when(userRelationshipRepository.save(any(UserRelationship.class)))
-                .thenReturn(savedRelationship);
-
-        UserRelationshipResDto expectedDto = UserRelationshipResDto.builder()
-                .id(1L)
-                .parentId(1L)
-                .parentEmail("john@exemple.com")
-                .childId(2L)
-                .childEmail("john-child@gmail.com")
-                .parentConfirmed(true)
-                .childConfirmed(false)
-                .fullyConfirmed(false)
-                .build();
-
-        when(userRelationshipMapper.toDto(any(UserRelationship.class)))
-                .thenReturn(expectedDto);
+                                                           .firstName("John-Child")
+                                                           .lastName("Doe-Child")
+                                                           .birthDate("2000-01-01")
+                                                           .whoAmI(IUserRelationService.PARENT)
+                                                           .build();
 
         // When
         UserRelationshipResDto res = userRelationService.requestRelation(dto);
@@ -124,86 +130,118 @@ public class UserRelationServiceTest extends AbstractTest {
         // Then
         assertNotNull(res);
         assertEquals("john-child@gmail.com", res.getChildEmail());
-        assertEquals("john@exemple.com", res.getParentEmail());
+        assertEquals("john-parent@exemple.com", res.getParentEmail());
         assertTrue(res.isParentConfirmed());
         assertFalse(res.isChildConfirmed());
         assertFalse(res.isFullyConfirmed());
 
-        // Verify interactions - use times(1) to be explicit
-        verify(userRepository, times(1)).findByKeyCloakSub(anyString());
-        verify(userRepository, times(1)).findByFirstNameAndLastNameAndBirthDate(
-                "John-Child", "Doe-Child", LocalDate.of(2000, 1, 1));
-        
-        ArgumentCaptor<UserRelationship> relationshipCaptor = ArgumentCaptor.forClass(UserRelationship.class);
-        verify(userRelationshipRepository, times(1)).save(relationshipCaptor.capture());
-        
-        UserRelationship capturedRelationship = relationshipCaptor.getValue();
-        assertEquals(parentUser, capturedRelationship.getParent());
-        assertEquals(childUser, capturedRelationship.getChild());
-        assertTrue(capturedRelationship.isParentConfirmed());
-        assertFalse(capturedRelationship.isChildConfirmed());
-        
-        verify(userRelationshipMapper, times(1)).toDto(any(UserRelationship.class));
+        // Verify relationship is saved in database
+        Optional<UserRelationship> savedRelationship = userRelationshipRepository.findByParentAndChild(parentUser, childUser);
+        assertTrue(savedRelationship.isPresent());
+        assertTrue(savedRelationship.get()
+                                    .isParentConfirmed());
+        assertFalse(savedRelationship.get()
+                                     .isChildConfirmed());
+    }
+
+    @Test
+    public void testSetUserRelationsFromChild() throws
+                                                TechnicalException {
+        // Given
+        childUser.setKeyCloakSub(TEST_USER_ID);
+        List<User> userList = List.of(parentUser, childBisUser, childUser);
+        userRepository.saveAll(userList);
+
+        this.initSecurityContextPlaceHolder();
+
+        UserRelationshipReqDto dto = UserRelationshipReqDto.builder()
+                                                           .firstName("John-Parent")
+                                                           .lastName("Doe-Parent")
+                                                           .birthDate("1980-01-01")
+                                                           .whoAmI(IUserRelationService.CHILD)
+                                                           .build();
+
+        // When
+        UserRelationshipResDto res = userRelationService.requestRelation(dto);
+
+        // Then
+        assertNotNull(res);
+        assertEquals("john-child@gmail.com", res.getChildEmail());
+        assertEquals("john-parent@exemple.com", res.getParentEmail());
+        assertFalse(res.isParentConfirmed());
+        assertTrue(res.isChildConfirmed());
+        assertFalse(res.isFullyConfirmed());
+
+        // Verify relationship is saved in database
+        Optional<UserRelationship> savedRelationship = userRelationshipRepository.findByParentAndChild(parentUser, childUser);
+        assertTrue(savedRelationship.isPresent());
+        assertFalse(savedRelationship.get()
+                                     .isParentConfirmed());
+        assertTrue(savedRelationship.get()
+                                    .isChildConfirmed());
     }
 
     @Test
     public void testRequestRelation_ParentNotFound() {
         // Given
         this.initSecurityContextPlaceHolder();
+        // Use non-existent keycloak sub
 
         UserRelationshipReqDto dto = UserRelationshipReqDto.builder()
-                .firstName("John-Child")
-                .lastName("Doe-Child")
-                .birthDate("2000-01-01")
-                .whoAmI(IUserRelationService.PARENT)
-                .build();
-
-        when(userRepository.findByKeyCloakSub(anyString()))
-                .thenReturn(Optional.empty());
+                                                           .firstName("John-Child")
+                                                           .lastName("Doe-Child")
+                                                           .birthDate("2000-01-01")
+                                                           .whoAmI(IUserRelationService.PARENT)
+                                                           .build();
 
         // When & Then
-        TechnicalException exception = assertThrows(TechnicalException.class, 
-                () -> userRelationService.requestRelation(dto));
-        
+        TechnicalException exception = assertThrows(TechnicalException.class,
+                                                    () -> userRelationService.requestRelation(dto));
+
         assertEquals(404, exception.getCode());
         assertEquals("Utilisateur n'est pas trouvé", exception.getMessage());
-        
-        // Verify only one call to findByKeyCloakSub
-        verify(userRepository, times(1)).findByKeyCloakSub(anyString());
-        // Verify that findByFirstNameAndLastNameAndBirthDate is never called
-        verify(userRepository, never()).findByFirstNameAndLastNameAndBirthDate(anyString(), anyString(), any(LocalDate.class));
     }
 
     @Test
     public void testRequestRelation_ChildNotFound() {
         // Given
+        childUser.setKeyCloakSub(TEST_USER_ID);
+        List<User> userList = List.of(parentUser, childBisUser, childUser);
+        userRepository.saveAll(userList);
+
         this.initSecurityContextPlaceHolder();
 
         UserRelationshipReqDto dto = UserRelationshipReqDto.builder()
-                .firstName("John-Child")
-                .lastName("Doe-Child")
-                .birthDate("2000-01-01")
-                .whoAmI(IUserRelationService.PARENT)
-                .build();
-
-        when(userRepository.findByKeyCloakSub(anyString()))
-                .thenReturn(Optional.of(parentUser));
-        
-        when(userRepository.findByFirstNameAndLastNameAndBirthDate(
-                anyString(), anyString(), any(LocalDate.class)))
-                .thenReturn(Optional.empty());
+                                                           .firstName("NonExistent")
+                                                           .lastName("Child")
+                                                           .birthDate("2000-01-01")
+                                                           .whoAmI(IUserRelationService.PARENT)
+                                                           .build();
 
         // When & Then
-        TechnicalException exception = assertThrows(TechnicalException.class, 
-                () -> userRelationService.requestRelation(dto));
-        
+        TechnicalException exception = assertThrows(TechnicalException.class,
+                                                    () -> userRelationService.requestRelation(dto));
+
         assertEquals(404, exception.getCode());
-        assertEquals("Votre enfin n'est pas trouvé", exception.getMessage());
-        
-        // Verify interactions
-        verify(userRepository, times(1)).findByKeyCloakSub(anyString());
-        verify(userRepository, times(1)).findByFirstNameAndLastNameAndBirthDate(anyString(), anyString(), any(LocalDate.class));
-        // Verify that save is never called
-        verify(userRelationshipRepository, never()).save(any(UserRelationship.class));
+        assertEquals("Votre enfant n'est pas trouvé", exception.getMessage());
+    }
+
+    @Test
+    public void testGetRelationShip_WhenUserAuthenticate() {
+        // given
+        this.initSecurityContextPlaceHolder();
+
+        // Create a relationship first
+        UserRelationship relationship = UserRelationship.builder()
+                                                        .parent(parentUser)
+                                                        .child(childUser)
+                                                        .parentConfirmed(true)
+                                                        .childConfirmed(true)
+                                                        .build();
+        userRelationshipRepository.save(relationship);
+
+        // when & then - add your specific test logic here
+        Optional<User> foundUser = userRepository.findByKeyCloakSub(TEST_USER_ID);
+        assertTrue(foundUser.isPresent());
     }
 }

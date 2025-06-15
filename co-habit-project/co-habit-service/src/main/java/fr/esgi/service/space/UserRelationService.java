@@ -3,6 +3,7 @@ package fr.esgi.service.space;
 import fr.esgi.domain.dto.user.UserRelationshipReqDto;
 import fr.esgi.domain.dto.user.UserRelationshipResDto;
 import fr.esgi.domain.exception.TechnicalException;
+import fr.esgi.domain.port.in.IUserRelationService;
 import fr.esgi.domain.util.DateUtils;
 import fr.esgi.persistence.entity.user.User;
 import fr.esgi.persistence.entity.user.UserRelationship;
@@ -24,28 +25,44 @@ public class UserRelationService extends AbstractService {
     private final UserRelationshipMapper     userRelationshipMapper;
 
 
-    public UserRelationshipResDto requestRelation(UserRelationshipReqDto userRelationshipReqDto) throws
-                                                                                                 TechnicalException {
+    public UserRelationshipResDto requestRelation(UserRelationshipReqDto dto) throws
+                                                                              TechnicalException {
 
-        User parent = userRepository.findByKeyCloakSub(getJwtAuthentication()
-                                                               .getName())
-                                    .orElseThrow(() -> new TechnicalException(404, "Utilisateur n'est pas trouvé"));
+        User userRequester = userRepository.findByKeyCloakSub(this.getUserSub())
+                                           .orElseThrow(() -> new TechnicalException(404, "Utilisateur n'est pas trouvé"));
 
-        LocalDate birthDate = DateUtils.stringToLocalDate(userRelationshipReqDto.getBirthDate());
+        LocalDate birthDate = DateUtils.stringToLocalDate(dto.getBirthDate());
 
-        User child = userRepository.findByFirstNameAndLastNameAndBirthDate(
-                                           userRelationshipReqDto.getFirstName(),
-                                           userRelationshipReqDto.getLastName(),
-                                           birthDate
-                                   )
-                                   .orElseThrow(() -> new TechnicalException(404, "Votre enfin n'est pas trouvé"));
+        User userRecipient = userRepository.findByFirstNameAndLastNameAndBirthDate(
+                                                   dto.getFirstName(),
+                                                   dto.getLastName(),
+                                                   birthDate
+                                           )
+                                           .orElseThrow(() -> new TechnicalException(404, String.format(
+                                                   "Votre %s n'est pas trouvé",
+                                                   dto.getWhoAmI()
+                                                      .equals(IUserRelationService.PARENT) ? "enfant" : "parent"
+                                           )));
 
         UserRelationship userRelationship = UserRelationship.builder()
-                                                            .parent(parent)
-                                                            .child(child)
-                                                            .parentConfirmed(true)
+                                                            .parentConfirmed(false)
                                                             .childConfirmed(false)
                                                             .build();
+
+        switch (dto.getWhoAmI()) {
+            case IUserRelationService.PARENT:
+                userRelationship.setChild(userRecipient);
+                userRelationship.setParent(userRequester);
+                userRelationship.setParentConfirmed(true);
+                break;
+            case IUserRelationService.CHILD:
+                userRelationship.setChild(userRequester);
+                userRelationship.setParent(userRecipient);
+                userRelationship.setChildConfirmed(true);
+                break;
+            default:
+                throw new TechnicalException(400, "Type de relation non supporté");
+        }
 
         userRelationshipRepository.save(userRelationship);
 
