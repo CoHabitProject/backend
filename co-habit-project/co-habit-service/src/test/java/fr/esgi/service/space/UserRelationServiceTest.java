@@ -229,6 +229,9 @@ public class UserRelationServiceTest extends AbstractTest {
     @Test
     public void testGetRelationShip_WhenUserAuthenticate() {
         // given
+        parentUser.setKeyCloakSub(TEST_USER_ID);
+        List<User> userList = List.of(parentUser, childBisUser, childUser);
+        userRepository.saveAll(userList);
         this.initSecurityContextPlaceHolder();
 
         // Create a relationship first
