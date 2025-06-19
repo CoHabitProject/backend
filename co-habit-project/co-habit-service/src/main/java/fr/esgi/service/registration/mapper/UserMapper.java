@@ -1,7 +1,7 @@
-package fr.esgi.service.mapper;
+package fr.esgi.service.registration.mapper;
 
 import fr.esgi.domain.dto.auth.RegisterReqDto;
-import fr.esgi.domain.dto.user.UserProfileDto;
+import fr.esgi.domain.dto.user.UserProfileResDto;
 import fr.esgi.domain.util.DateUtils;
 import fr.esgi.persistence.entity.user.User;
 import org.mapstruct.Mapper;
@@ -30,15 +30,15 @@ public interface UserMapper {
     User mapDtoToUser(String userKeycloakId, RegisterReqDto dto);
 
     /**
-     * Maps User entity to UserProfileDto for profile responses
+     * Maps User entity to UserProfileResDto for profile responses
      */
     @Mapping(target = "birthDate", source = "birthDate", qualifiedByName = "localDateToString")
-    UserProfileDto mapUserToProfileDto(User user);
+    UserProfileResDto mapUserToProfileDto(User user);
 
     /**
-     * Maps list of User entities to list of UserProfileDto
+     * Maps list of User entities to list of UserProfileResDto
      */
-    List<UserProfileDto> mapUsersToProfileDtos(List<User> users);
+    List<UserProfileResDto> mapUsersToProfileDtos(List<User> users);
 
     /**
      * Updates existing User entity with data from RegisterReqDto

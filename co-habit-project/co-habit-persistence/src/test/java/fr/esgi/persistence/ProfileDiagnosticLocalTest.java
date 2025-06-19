@@ -8,7 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
 
-@SpringBootTest(classes = TestConfig.class)
+@SpringBootTest()
 @ActiveProfiles("local")
 public class ProfileDiagnosticLocalTest {
 

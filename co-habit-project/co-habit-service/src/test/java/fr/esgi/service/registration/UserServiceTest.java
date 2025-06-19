@@ -5,7 +5,7 @@ import fr.esgi.domain.exception.TechnicalException;
 import fr.esgi.domain.port.in.IUserService;
 import fr.esgi.persistence.entity.user.User;
 import fr.esgi.persistence.repository.user.UserRepository;
-import fr.esgi.service.mapper.UserMapper;
+import fr.esgi.service.registration.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

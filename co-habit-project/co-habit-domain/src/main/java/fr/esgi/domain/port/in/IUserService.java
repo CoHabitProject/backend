@@ -1,7 +1,7 @@
 package fr.esgi.domain.port.in;
 
 import fr.esgi.domain.dto.auth.RegisterReqDto;
-import fr.esgi.domain.dto.user.UserProfileDto;
+import fr.esgi.domain.dto.user.UserProfileResDto;
 import fr.esgi.domain.exception.TechnicalException;
 
 /**
@@ -21,7 +21,7 @@ public interface IUserService {
      * 
      * @throws TechnicalException if retrieval fails
      */
-    UserProfileDto getUserProfile() throws TechnicalException;
+    UserProfileResDto getUserProfile() throws TechnicalException;
 
     /**
      * Gets user profile by Keycloak subject ID
@@ -29,5 +29,5 @@ public interface IUserService {
      * @param keycloakSub Keycloak subject ID
      * @throws TechnicalException if retrieval fails
      */
-    UserProfileDto getUserProfile(String keycloakSub) throws TechnicalException;
+    UserProfileResDto getUserProfile(String keycloakSub) throws TechnicalException;
 }

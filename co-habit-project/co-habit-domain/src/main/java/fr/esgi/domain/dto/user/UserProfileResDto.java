@@ -14,12 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserProfileDto {
-    /*private String       id;
-    private String       username;
-    private String       email;
-    private boolean      emailVerified;
-    private List<String> roles;*/
+public class UserProfileResDto {
     private Long          id;
     private String        keyCloakSub;
     private String        email;

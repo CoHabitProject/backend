@@ -1,7 +1,7 @@
 package fr.esgi.service.registration;
 
 import fr.esgi.domain.dto.auth.RegisterReqDto;
-import fr.esgi.domain.dto.user.UserProfileDto;
+import fr.esgi.domain.dto.user.UserProfileResDto;
 import fr.esgi.domain.exception.TechnicalException;
 import fr.esgi.domain.port.in.IUserService;
 import fr.esgi.service.AbstractService;
@@ -29,7 +29,7 @@ public abstract class AbstractUserServiceDecorator extends
     }
 
     @Override
-    public UserProfileDto getUserProfile() throws
+    public UserProfileResDto getUserProfile() throws
                                            TechnicalException {
         return decoratedService.getUserProfile();
     }
