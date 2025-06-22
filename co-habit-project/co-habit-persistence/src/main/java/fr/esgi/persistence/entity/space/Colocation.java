@@ -32,8 +32,9 @@ public class Colocation {
     private String city;
     
     private String postalCode;
-    
-    private String country;
+
+    @Column(name = "invitation_code", unique = true)
+    private String invitationCode;
     
     @Column(name = "max_roommates")
     private Integer maxRoommates;
@@ -73,6 +74,7 @@ public class Colocation {
         this.name = name;
         this.address = address;
         this.manager = manager;
+        this.roommates.add(manager); // Le manager est automatiquement ajouté comme colocataire
     }
     
     // Méthodes utilitaires pour gérer les colocataires

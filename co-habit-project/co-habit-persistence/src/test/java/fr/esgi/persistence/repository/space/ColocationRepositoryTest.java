@@ -60,7 +60,6 @@ public class ColocationRepositoryTest {
         colocation.setAddress("123 Rue de la Paix");
         colocation.setCity("Paris");
         colocation.setPostalCode("75001");
-        colocation.setCountry("France");
         colocation.setMaxRoommates(3);
         colocation.setManager(manager);
         colocation.addRoommate(roommate1);

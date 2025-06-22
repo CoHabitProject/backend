@@ -20,6 +20,12 @@ public interface ColocationRepository extends JpaRepository<Colocation, Long> {
     @Query("SELECT c FROM Colocation c JOIN c.roommates r WHERE r = :user")
     List<Colocation> findByRoommate(@Param("user") User user);
 
+    // Trouver toutes les colocations où un utilisateur est colocataire (using Set contains)
+    List<Colocation> findByRoommatesContaining(User user);
+
+    // Trouver une colocation par code d'invitation
+    Optional<Colocation> findByInvitationCode(String invitationCode);
+
     // Trouver toutes les colocations (gérées ou en tant que colocataire) d'un utilisateur
     @Query("SELECT DISTINCT c FROM Colocation c WHERE c.manager = :user OR :user MEMBER OF c.roommates")
     List<Colocation> findAllByUser(@Param("user") User user);
