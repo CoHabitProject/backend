@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/colocations")
+@RequestMapping("/api/interne/colocations")
 @RequiredArgsConstructor
 @Tag(name = "Colocation", description = "API de gestion des colocations")
 public class ColocationRest {
