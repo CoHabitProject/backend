@@ -37,6 +37,9 @@ spring:
     uris:
       - http://localhost:9200
 
+elasticsearch:
+  enabled: false
+
 # Configuration CORS
 cors:
   allowed-origins: ${CORS_ALLOWED_ORIGINS:*}
