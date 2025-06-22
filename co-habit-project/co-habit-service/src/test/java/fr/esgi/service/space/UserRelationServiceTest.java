@@ -105,6 +105,9 @@ public class UserRelationServiceTest extends AbstractTest {
         // Clear repositories
         userRelationshipRepository.deleteAll();
         userRepository.deleteAll();
+
+        // Clear security context
+        this.cleanupSecurityContext();
     }
 
     @Test
@@ -246,5 +249,137 @@ public class UserRelationServiceTest extends AbstractTest {
         // when & then - add your specific test logic here
         Optional<User> foundUser = userRepository.findByKeyCloakSub(TEST_USER_ID);
         assertTrue(foundUser.isPresent());
+    }
+
+    @Test
+    public void testGetAllRelationsForUser_WhenUserHasMultipleRelationships() throws
+                                                                              TechnicalException {
+        // Given
+        parentUser.setKeyCloakSub(TEST_USER_ID);
+        List<User> userList = List.of(parentUser, childBisUser, childUser);
+        userRepository.saveAll(userList);
+        this.initSecurityContextPlaceHolder();
+
+        // Create multiple relationships for the parent user
+        UserRelationship relationship1 = UserRelationship.builder()
+                                                         .parent(parentUser)
+                                                         .child(childUser)
+                                                         .parentConfirmed(true)
+                                                         .childConfirmed(true)
+                                                         .build();
+
+        UserRelationship relationship2 = UserRelationship.builder()
+                                                         .parent(parentUser)
+                                                         .child(childBisUser)
+                                                         .parentConfirmed(true)
+                                                         .childConfirmed(false)
+                                                         .build();
+
+        userRelationshipRepository.saveAll(List.of(relationship1, relationship2));
+
+        // When
+        List<UserRelationshipResDto> relationships = userRelationService.getAllRelationsForUser();
+
+        // Then
+        assertNotNull(relationships);
+        assertEquals(2, relationships.size());
+
+        // Verify first relationship
+        UserRelationshipResDto rel1 = relationships.stream()
+                                                   .filter(r -> r.getChildEmail()
+                                                                 .equals("john-child@gmail.com"))
+                                                   .findFirst()
+                                                   .orElse(null);
+        assertNotNull(rel1);
+        assertTrue(rel1.isParentConfirmed());
+        assertTrue(rel1.isChildConfirmed());
+        assertTrue(rel1.isFullyConfirmed());
+
+        // Verify second relationship
+        UserRelationshipResDto rel2 = relationships.stream()
+                                                   .filter(r -> r.getChildEmail()
+                                                                 .equals("john-child-bis@gmail.com"))
+                                                   .findFirst()
+                                                   .orElse(null);
+        assertNotNull(rel2);
+        assertTrue(rel2.isParentConfirmed());
+        assertFalse(rel2.isChildConfirmed());
+        assertFalse(rel2.isFullyConfirmed());
+    }
+
+    @Test
+    public void testGetAllRelationsForUser_WhenUserIsChild() throws
+                                                             TechnicalException {
+        // Given
+        childUser.setKeyCloakSub(TEST_USER_ID);
+        List<User> userList = List.of(parentUser, childBisUser, childUser);
+        userRepository.saveAll(userList);
+        this.initSecurityContextPlaceHolder();
+
+        // Create relationship where the authenticated user is a child
+        UserRelationship relationship = UserRelationship.builder()
+                                                        .parent(parentUser)
+                                                        .child(childUser)
+                                                        .parentConfirmed(false)
+                                                        .childConfirmed(true)
+                                                        .build();
+
+        userRelationshipRepository.save(relationship);
+
+        // When
+        List<UserRelationshipResDto> relationships = userRelationService.getAllRelationsForUser();
+
+        // Then
+        assertNotNull(relationships);
+        assertEquals(1, relationships.size());
+
+        UserRelationshipResDto rel = relationships.get(0);
+        assertEquals("john-child@gmail.com", rel.getChildEmail());
+        assertEquals("john-parent@exemple.com", rel.getParentEmail());
+        assertFalse(rel.isParentConfirmed());
+        assertTrue(rel.isChildConfirmed());
+        assertFalse(rel.isFullyConfirmed());
+    }
+
+    @Test
+    public void testGetAllRelationsForUser_WhenUserHasNoRelationships() throws
+                                                                        TechnicalException {
+        // Given
+        parentUser.setKeyCloakSub(TEST_USER_ID);
+        userRepository.save(parentUser);
+        this.initSecurityContextPlaceHolder();
+
+        // When
+        List<UserRelationshipResDto> relationships = userRelationService.getAllRelationsForUser();
+
+        // Then
+        assertNotNull(relationships);
+        assertTrue(relationships.isEmpty());
+    }
+
+    @Test
+    public void testGetAllRelationsForUser_WhenUserNotFound() {
+        // Given
+        this.initSecurityContextPlaceHolder();
+        // No user saved with TEST_USER_ID
+
+        // When & Then
+        TechnicalException exception = assertThrows(TechnicalException.class,
+                                                    () -> userRelationService.getAllRelationsForUser());
+
+        assertEquals(404, exception.getCode());
+        assertEquals("Utilisateur n'est pas trouvé", exception.getMessage());
+    }
+
+    @Test
+    public void testGetAllRelationsForUser_WhenUserNotAuthenticated() {
+        // Given - no security context
+
+        // When & Then
+        TechnicalException exception = assertThrows(TechnicalException.class,
+                                                    () -> userRelationService.getAllRelationsForUser());
+
+        assertEquals(401, exception.getCode());
+        assertEquals("User is not authenticated", exception.getMessage());
     }
 }

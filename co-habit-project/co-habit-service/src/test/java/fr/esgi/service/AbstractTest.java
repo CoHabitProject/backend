@@ -31,7 +31,7 @@ public class AbstractTest {
         authorities.add(new SimpleGrantedAuthority("ROLE_USR1"));
         authorities.add(new SimpleGrantedAuthority("ROLE_USR2"));
 
-//        final String        TEST_USER_ID    = "123";
+        //        final String        TEST_USER_ID    = "123";
         final String        TEST_USERNAME   = "johndoe";
         final String        TEST_EMAIL      = "john@example.com";
         final LocalDateTime TEST_CREATED_AT = LocalDateTime.now();
@@ -51,5 +51,36 @@ public class AbstractTest {
                              .setAuthentication(authentication);
     }
 
-    ;
+    protected void initSecurityContextPlaceHolderWithSub(String sub) {
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USR1"));
+        authorities.add(new SimpleGrantedAuthority("ROLE_USR2"));
+
+        //        final String        TEST_USER_ID    = "123";
+        final String        TEST_USERNAME   = "johndoe";
+        final String        TEST_EMAIL      = "john@example.com";
+        final LocalDateTime TEST_CREATED_AT = LocalDateTime.now();
+
+        Jwt jwt = Jwt.withTokenValue("token")
+                     .claim("sub", sub)
+                     .claim("preferred_username", TEST_USERNAME)
+                     .claim("email", TEST_EMAIL)
+                     .claim("email_verified", true)
+                     .claim("realm_access", Map.of("roles", List.of("view-profil")))
+                     .header("alg", "none")
+                     .build();
+
+        JwtAuthenticationToken authentication = new JwtAuthenticationToken(jwt, authorities);
+        authentication.setAuthenticated(true);
+        SecurityContextHolder.getContext()
+                             .setAuthentication(authentication);
+    }
+
+    /**
+     * Cleans up the security context by clearing the authentication.
+     * This method should be called after each test to ensure a clean state.
+     */
+    protected void cleanupSecurityContext() {
+        SecurityContextHolder.clearContext();
+    }
 }

@@ -25,7 +25,7 @@ spring:
   data:
     elasticsearch:
       repositories:
-        enabled: true
+        enabled: false
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -56,3 +56,6 @@ project:
 logging:
   level:
     org.springframework.web: DEBUG
+
+elasticsearch:
+  enabled: false

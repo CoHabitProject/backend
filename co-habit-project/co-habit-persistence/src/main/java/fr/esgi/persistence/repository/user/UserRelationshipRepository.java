@@ -40,7 +40,7 @@ public interface UserRelationshipRepository extends JpaRepository<UserRelationsh
                     FROM UserRelationship ur 
                     WHERE 
                     ur.parent.id = :userId 
-                    OR ur.child.id = :userId4
+                    OR ur.child.id = :userId
                     """
     )
     List<UserRelationship> findAllRelationshipsForUser(@Param("userId") Long userId);

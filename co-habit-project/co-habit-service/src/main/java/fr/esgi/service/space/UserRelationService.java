@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -67,6 +68,17 @@ public class UserRelationService extends AbstractService {
         userRelationshipRepository.save(userRelationship);
 
         return userRelationshipMapper.toDto(userRelationship);
+    }
+
+    public List<UserRelationshipResDto> getAllRelationsForUser() throws TechnicalException {
+        User authenticatedUser = userRepository.findByKeyCloakSub(this.getUserSub())
+                                              .orElseThrow(() -> new TechnicalException(404, "Utilisateur n'est pas trouvé"));
+
+        List<UserRelationship> relationships = userRelationshipRepository.findAllRelationshipsForUser(authenticatedUser.getId());
+        
+        return relationships.stream()
+                           .map(userRelationshipMapper::toDto)
+                           .toList();
     }
 
 }
