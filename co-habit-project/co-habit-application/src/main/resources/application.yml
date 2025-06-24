@@ -59,6 +59,3 @@ project:
 logging:
   level:
     org.springframework.web: DEBUG
-
-elasticsearch:
-  enabled: false
