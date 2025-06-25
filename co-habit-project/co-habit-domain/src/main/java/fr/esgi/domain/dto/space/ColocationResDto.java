@@ -21,8 +21,14 @@ public class ColocationResDto extends ColocationReqDto {
     @Schema(description = "Nombre de personnes", example = "4")
     private int numberOfPeople;
 
-    @Schema(description = "Date de création de coloc")
+    @Schema(description = "Date de création de coloc", example = "2025-06-25T08:20:41.678Z")
     private String dateEntree;
+
+    @Schema(description = "Date de création", example = "2025-06-25T08:20:41.678Z")
+    private String createdAt;
+
+    @Schema(description = "Date de dernière mise à jour", example = "2025-06-25T08:20:41.678Z")
+    private String updatedAt;
 
     @Schema(description = "Code d'invitation pour rejoindre la colocation", example = "ABC12345")
     private String invitationCode;
@@ -38,6 +44,8 @@ public class ColocationResDto extends ColocationReqDto {
         this.id             = id;
         this.numberOfPeople = numberOfPeople;
         this.dateEntree     = null;
+        this.createdAt      = null;
+        this.updatedAt      = null;
         this.invitationCode = null;
         this.manager        = null;
     }

@@ -3,6 +3,7 @@ package fr.esgi.domain.util;
 import fr.esgi.domain.exception.TechnicalException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
@@ -11,8 +12,10 @@ import java.time.format.DateTimeParseException;
  */
 public class DateUtils {
 
-    private static final String            DEFAULT_DATE_PATTERN = "yyyy-MM-dd";
-    private static final DateTimeFormatter DEFAULT_FORMATTER    = DateTimeFormatter.ofPattern(DEFAULT_DATE_PATTERN);
+    private static final String            DEFAULT_DATE_PATTERN     = "yyyy-MM-dd";
+    private static final String            DEFAULT_DATETIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    private static final DateTimeFormatter DEFAULT_FORMATTER        = DateTimeFormatter.ofPattern(DEFAULT_DATE_PATTERN);
+    private static final DateTimeFormatter DEFAULT_DATETIME_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_DATETIME_PATTERN);
 
     private DateUtils() {
         // Private constructor to prevent instantiation
@@ -92,5 +95,33 @@ public class DateUtils {
         } catch (TechnicalException e) {
             return null;
         }
+    }
+
+    /**
+     * Converts a LocalDateTime to ISO 8601 string format
+     *
+     * @param dateTime the LocalDateTime to convert
+     * @return the formatted date-time string
+     */
+    public static String localDateTimeToString(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            return null;
+        }
+        return dateTime.toString();
+    }
+
+    /**
+     * Converts a LocalDateTime to string using a specified pattern
+     *
+     * @param dateTime the LocalDateTime to convert
+     * @param pattern  the date-time pattern to use for formatting
+     * @return the formatted date-time string
+     */
+    public static String localDateTimeToString(LocalDateTime dateTime, String pattern) {
+        if (dateTime == null) {
+            return null;
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+        return dateTime.format(formatter);
     }
 }

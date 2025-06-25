@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -74,5 +75,13 @@ public interface UserMapper {
             return null;
         }
         return DateUtils.localDateToString(localDate);
+    }
+
+    @Named("localDateTimeToString")
+    default String localDateTimeToString(LocalDateTime localDateTime) {
+        if (localDateTime == null) {
+            return null;
+        }
+        return localDateTime.toString();
     }
 }

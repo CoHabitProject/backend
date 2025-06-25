@@ -36,6 +36,8 @@ public interface ColocationMapper {
      */
     @Mapping(target = "numberOfPeople", expression = "java(colocation.getRoommates().size())")
     @Mapping(target = "dateEntree", source = "createdAt", qualifiedByName = "localDateTimeToString")
+    @Mapping(target = "createdAt", source = "createdAt", qualifiedByName = "localDateTimeToISOString")
+    @Mapping(target = "updatedAt", source = "updatedAt", qualifiedByName = "localDateTimeToISOString")
     @Mapping(target = "invitationCode", source = "invitationCode")
     @Mapping(target = "manager", source = "manager")
     @Mapping(target = "users", source = "roommates")
@@ -65,6 +67,14 @@ public interface ColocationMapper {
             return null;
         }
         return DateUtils.localDateToString(dateTime.toLocalDate());
+    }
+
+    @Named("localDateTimeToISOString")
+    default String localDateTimeToISOString(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            return null;
+        }
+        return dateTime.toString();
     }
 
     @Named("usersToUserProfileDtos")
