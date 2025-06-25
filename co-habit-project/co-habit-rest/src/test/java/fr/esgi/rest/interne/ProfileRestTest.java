@@ -83,7 +83,7 @@ class ProfileRestTest {
                                                              .firstName("John")
                                                              .lastName("Doe")
                                                              .fullName("John Doe")
-                                                             .createdAt(TEST_CREATED_AT)
+                                                             .createdAt(TEST_CREATED_AT.toString()) // Convert to String
                                                              .build();
                 
         when(userMapper.mapUserToProfileDto(mockUser)).thenReturn(expectedProfile);
@@ -92,7 +92,7 @@ class ProfileRestTest {
         ResponseEntity<?> response = profileRest.getUserProfile();
 
         // Assert
-        assertThat(response.getStatusCodeValue()).isEqualTo(200);
+        assertThat(response.getStatusCode().value()).isEqualTo(200); // Use getStatusCode().value()
         assertThat(response.getBody()).isInstanceOf(UserProfileResDto.class);
 
         UserProfileResDto user = (UserProfileResDto) response.getBody();
@@ -103,7 +103,7 @@ class ProfileRestTest {
         assertThat(user.getFirstName()).isEqualTo("John");
         assertThat(user.getLastName()).isEqualTo("Doe");
         assertThat(user.getFullName()).isEqualTo("John Doe");
-        assertThat(user.getCreatedAt()).isEqualTo(TEST_CREATED_AT);
+        assertThat(user.getCreatedAt()).isEqualTo(TEST_CREATED_AT.toString()); // Compare as String
     }
 
     @Test

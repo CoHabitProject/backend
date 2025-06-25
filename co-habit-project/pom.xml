@@ -64,6 +64,7 @@
         <springdoc-openapi>2.8.8</springdoc-openapi>
         <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
         <swagger-annotations-jakarta>2.2.30</swagger-annotations-jakarta>
+        <assertj.core>3.27.3</assertj.core>
     </properties>
 
     <dependencyManagement>

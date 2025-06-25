@@ -193,7 +193,7 @@ public class ColocationService extends AbstractService {
     private String generateInvitationCode() {
         return UUID.randomUUID()
                    .toString()
-                   .substring(0, 8)
+                   .substring(0, 5)
                    .toUpperCase();
     }
 }
