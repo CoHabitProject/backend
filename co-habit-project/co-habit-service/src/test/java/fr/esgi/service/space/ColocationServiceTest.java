@@ -133,6 +133,7 @@ public class ColocationServiceTest extends AbstractTest {
         assertEquals(1, result.getNumberOfPeople()); // Manager is added as roommate
         assertNotNull(result.getDateEntree());
         assertNotNull(result.getId());
+        assertNotNull(result.getInvitationCode());
         assertNotNull(result.getManager());
         assertEquals("John", result.getManager().getFirstName());
         assertEquals("Manager", result.getManager().getLastName());
@@ -148,6 +149,7 @@ public class ColocationServiceTest extends AbstractTest {
                                   .isRoommate(managerUser));
         assertNotNull(savedColocation.get()
                                      .getInvitationCode());
+        assertEquals(result.getInvitationCode(), savedColocation.get().getInvitationCode());
     }
 
     @Test
@@ -177,6 +179,7 @@ public class ColocationServiceTest extends AbstractTest {
         Colocation colocation = new Colocation("Original Name", "Original Address", managerUser);
         colocation.setCity("Original City");
         colocation.setPostalCode("00000");
+        colocation.setInvitationCode("ORIGINAL1");
         colocation = colocationRepository.save(colocation);
 
         ColocationReqDto updateDto = new ColocationReqDto();
@@ -194,6 +197,7 @@ public class ColocationServiceTest extends AbstractTest {
         assertEquals("Updated City", result.getCity());
         assertEquals("Updated Address", result.getAddress());
         assertEquals("11111", result.getPostalCode());
+        assertEquals("ORIGINAL1", result.getInvitationCode()); // Should remain unchanged
         assertNotNull(result.getManager());
         assertEquals("John", result.getManager().getFirstName());
         assertEquals("Manager", result.getManager().getLastName());
@@ -234,6 +238,7 @@ public class ColocationServiceTest extends AbstractTest {
         Colocation colocation = new Colocation("Test Coloc", "Test Address", managerUser);
         colocation.setCity("Test City");
         colocation.setPostalCode("12345");
+        colocation.setInvitationCode("TEST5678");
         colocation = colocationRepository.save(colocation);
 
         // When
@@ -245,6 +250,7 @@ public class ColocationServiceTest extends AbstractTest {
         assertEquals("Test City", result.getCity());
         assertEquals("Test Address", result.getAddress());
         assertEquals("12345", result.getPostalCode());
+        assertEquals("TEST5678", result.getInvitationCode());
         assertNotNull(result.getManager());
         assertEquals("John", result.getManager().getFirstName());
         assertEquals("Manager", result.getManager().getLastName());
@@ -379,6 +385,7 @@ public class ColocationServiceTest extends AbstractTest {
         // Then
         assertNotNull(result);
         assertEquals("Test Coloc", result.getName());
+        assertEquals("TEST1234", result.getInvitationCode());
         assertTrue(result.getNumberOfPeople() > 0);
         assertNotNull(result.getManager());
         assertEquals("John", result.getManager().getFirstName());
