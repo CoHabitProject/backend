@@ -36,6 +36,7 @@ public interface ColocationMapper {
      */
     @Mapping(target = "numberOfPeople", expression = "java(colocation.getRoommates().size())")
     @Mapping(target = "dateEntree", source = "createdAt", qualifiedByName = "localDateTimeToString")
+    @Mapping(target = "invitationCode", source = "invitationCode")
     @Mapping(target = "manager", source = "manager")
     @Mapping(target = "users", source = "roommates")
     ColocationResDto mapColocationToResDto(Colocation colocation);

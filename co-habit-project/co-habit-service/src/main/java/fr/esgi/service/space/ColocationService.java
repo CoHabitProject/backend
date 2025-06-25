@@ -69,13 +69,22 @@ public class ColocationService extends AbstractService {
     }
 
     /**
-     * Gets a colocation by ID
+     * Gets a colocation by ID (only accessible to members)
      */
     @Transactional(readOnly = true)
     public ColocationResDto getColocationById(Long colocationId) throws
                                                                  TechnicalException {
+        String userSub = getUserSub();
+
+        User user = userRepository.findByKeyCloakSub(userSub)
+                                  .orElseThrow(() -> new TechnicalException(404, "Utilisateur n'est pas trouvé"));
+
         Colocation colocation = colocationRepository.findById(colocationId)
                                                     .orElseThrow(() -> new TechnicalException(404, "Colocation non trouvée"));
+
+        if (!colocation.isRoommate(user)) {
+            throw new TechnicalException(403, "Vous n'avez pas accès à cette colocation");
+        }
 
         return colocationMapper.mapColocationToResDto(colocation);
     }

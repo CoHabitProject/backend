@@ -17,24 +17,28 @@ import java.util.List;
 public class ColocationResDto extends ColocationReqDto {
     @Schema(description = "Identifiant unique de la colocation", example = "1")
     private Long id;
-    
+
     @Schema(description = "Nombre de personnes", example = "4")
     private int numberOfPeople;
 
     @Schema(description = "Date de création de coloc")
     private String dateEntree;
-    
+
+    @Schema(description = "Code d'invitation pour rejoindre la colocation", example = "ABC12345")
+    private String invitationCode;
+
     @Schema(description = "Manager de coloc")
     private UserProfileResDto manager;
-    
+
     @Schema(description = "Liste des utilisateurs")
     private List<UserProfileResDto> users;
 
     public ColocationResDto(Long id, String name, String city, String address, String postalCode, int numberOfPeople) {
         super(name, city, address, postalCode);
-        this.id = id;
+        this.id             = id;
         this.numberOfPeople = numberOfPeople;
-        this.dateEntree = null;
-        this.manager = null;
+        this.dateEntree     = null;
+        this.invitationCode = null;
+        this.manager        = null;
     }
 }
