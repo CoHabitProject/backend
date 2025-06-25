@@ -135,9 +135,15 @@ public class ColocationServiceTest extends AbstractTest {
         assertNotNull(result.getId());
         assertNotNull(result.getInvitationCode());
         assertNotNull(result.getManager());
-        assertEquals("John", result.getManager().getFirstName());
-        assertEquals("Manager", result.getManager().getLastName());
-        assertEquals("manager@example.com", result.getManager().getEmail());
+        assertEquals("John",
+                     result.getManager()
+                           .getFirstName());
+        assertEquals("Manager",
+                     result.getManager()
+                           .getLastName());
+        assertEquals("manager@example.com",
+                     result.getManager()
+                           .getEmail());
 
         // Verify in database
         Optional<Colocation> savedColocation = colocationRepository.findById(result.getId());
@@ -149,7 +155,9 @@ public class ColocationServiceTest extends AbstractTest {
                                   .isRoommate(managerUser));
         assertNotNull(savedColocation.get()
                                      .getInvitationCode());
-        assertEquals(result.getInvitationCode(), savedColocation.get().getInvitationCode());
+        assertEquals(result.getInvitationCode(),
+                     savedColocation.get()
+                                    .getInvitationCode());
     }
 
     @Test
@@ -199,8 +207,12 @@ public class ColocationServiceTest extends AbstractTest {
         assertEquals("11111", result.getPostalCode());
         assertEquals("ORIGINAL1", result.getInvitationCode()); // Should remain unchanged
         assertNotNull(result.getManager());
-        assertEquals("John", result.getManager().getFirstName());
-        assertEquals("Manager", result.getManager().getLastName());
+        assertEquals("John",
+                     result.getManager()
+                           .getFirstName());
+        assertEquals("Manager",
+                     result.getManager()
+                           .getLastName());
     }
 
     @Test
@@ -235,6 +247,8 @@ public class ColocationServiceTest extends AbstractTest {
                                                 TechnicalException {
         // Given
         userRepository.save(managerUser);
+        this.initSecurityContextPlaceHolder();
+
         Colocation colocation = new Colocation("Test Coloc", "Test Address", managerUser);
         colocation.setCity("Test City");
         colocation.setPostalCode("12345");
@@ -252,15 +266,126 @@ public class ColocationServiceTest extends AbstractTest {
         assertEquals("12345", result.getPostalCode());
         assertEquals("TEST5678", result.getInvitationCode());
         assertNotNull(result.getManager());
-        assertEquals("John", result.getManager().getFirstName());
-        assertEquals("Manager", result.getManager().getLastName());
+        assertEquals("John",
+                     result.getManager()
+                           .getFirstName());
+        assertEquals("Manager",
+                     result.getManager()
+                           .getLastName());
+    }
+
+    @Test
+    public void testGetColocationById_Success_AsRoommate() throws
+                                                           TechnicalException {
+        // Given
+        List<User> users = List.of(managerUser, roommateUser);
+        userRepository.saveAll(users);
+
+        Colocation colocation = new Colocation("Test Coloc", "Test Address", managerUser);
+        colocation.setCity("Test City");
+        colocation.setPostalCode("12345");
+        colocation.setInvitationCode("TEST5678");
+        colocation.addRoommate(roommateUser);
+        colocation = colocationRepository.save(colocation);
+
+        // Set roommateUser as authenticated user
+        roommateUser.setKeyCloakSub("roommate-sub");
+        userRepository.save(roommateUser);
+        this.initSecurityContextPlaceHolderWithSub("roommate-sub");
+
+        // When
+        ColocationResDto result = colocationService.getColocationById(colocation.getId());
+
+        // Then
+        assertNotNull(result);
+        assertEquals("Test Coloc", result.getName());
+        assertEquals("Test City", result.getCity());
+        assertEquals("Test Address", result.getAddress());
+        assertEquals("12345", result.getPostalCode());
+        assertEquals("TEST5678", result.getInvitationCode());
+        assertNotNull(result.getManager());
+        assertEquals("John",
+                     result.getManager()
+                           .getFirstName());
+        assertEquals("Manager",
+                     result.getManager()
+                           .getLastName());
+    }
+
+    @Test
+    public void testGetColocationById_AccessDenied_NotMember() {
+        // Given
+        List<User> users = List.of(managerUser, otherUser);
+        userRepository.saveAll(users);
+
+        Colocation colocation = new Colocation("Test Coloc", "Test Address", managerUser);
+        colocation.setCity("Test City");
+        colocation.setPostalCode("12345");
+        colocation = colocationRepository.save(colocation);
+
+        // Set otherUser as authenticated user (not a member)
+        otherUser.setKeyCloakSub("other-sub");
+        userRepository.save(otherUser);
+        this.initSecurityContextPlaceHolderWithSub("other-sub");
+
+        Long colocationId = colocation.getId();
+
+        // When & Then
+        TechnicalException exception = assertThrows(TechnicalException.class,
+                                                    () -> colocationService.getColocationById(colocationId));
+
+        assertEquals(403, exception.getCode());
+        assertEquals("Vous n'avez pas accès à cette colocation", exception.getMessage());
+    }
+
+    @Test
+    public void testGetColocationById_UserNotAuthenticated() {
+        // Given
+        userRepository.save(managerUser);
+        Colocation colocation = new Colocation("Test Coloc", "Test Address", managerUser);
+        colocation = colocationRepository.save(colocation);
+
+        // No security context
+
+        Long colocationId = colocation.getId();
+
+        // When & Then
+        TechnicalException exception = assertThrows(TechnicalException.class,
+                                                    () -> colocationService.getColocationById(colocationId));
+
+        assertEquals(401, exception.getCode());
+        assertEquals("User is not authenticated", exception.getMessage());
+    }
+
+    @Test
+    public void testGetColocationById_UserNotFound() {
+        // Given
+        userRepository.save(managerUser);
+        Colocation colocation = new Colocation("Test Coloc", "Test Address", managerUser);
+        colocation = colocationRepository.save(colocation);
+
+        // Set authentication with non-existent user
+        this.initSecurityContextPlaceHolderWithSub("non-existent-user");
+
+        Long colocationId = colocation.getId();
+
+        // When & Then
+        TechnicalException exception = assertThrows(TechnicalException.class,
+                                                    () -> colocationService.getColocationById(colocationId));
+
+        assertEquals(404, exception.getCode());
+        assertEquals("Utilisateur n'est pas trouvé", exception.getMessage());
     }
 
     @Test
     public void testGetColocationById_NotFound() {
+        // Given
+        userRepository.save(managerUser);
+        this.initSecurityContextPlaceHolder();
+
         // When & Then
         TechnicalException exception = assertThrows(TechnicalException.class,
-                                                    () -> colocationService.getColocationById(999L));
+                                                    () -> colocationService.getColocationById(1009L));
 
         assertEquals(404, exception.getCode());
         assertEquals("Colocation non trouvée", exception.getMessage());
@@ -316,8 +441,12 @@ public class ColocationServiceTest extends AbstractTest {
         assertEquals("Test Coloc",
                      result.get(0)
                            .getName());
-        assertEquals(result.get(0).getManager().getEmail(), managerUser.getEmail());
-        assertEquals(result.get(0).getUsers().size(), 2); // Manager + Roommate
+        assertEquals(result.get(0)
+                           .getManager()
+                           .getEmail(), managerUser.getEmail());
+        assertEquals(result.get(0)
+                           .getUsers()
+                           .size(), 2); // Manager + Roommate
     }
 
     @Test
@@ -388,8 +517,12 @@ public class ColocationServiceTest extends AbstractTest {
         assertEquals("TEST1234", result.getInvitationCode());
         assertTrue(result.getNumberOfPeople() > 0);
         assertNotNull(result.getManager());
-        assertEquals("John", result.getManager().getFirstName());
-        assertEquals("Manager", result.getManager().getLastName());
+        assertEquals("John",
+                     result.getManager()
+                           .getFirstName());
+        assertEquals("Manager",
+                     result.getManager()
+                           .getLastName());
 
         // Verify in database
         Colocation updatedColocation = colocationRepository.findById(colocation.getId())
