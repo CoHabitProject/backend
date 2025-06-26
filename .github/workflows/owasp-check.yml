@@ -1,0 +1,34 @@
+name: OWASP Dependency Check
+
+on:
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 2 * * 1,2,3,4,5'
+
+jobs:
+  owasp-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build project first
+      run: mvn clean install -DskipTests
+      
+    - name: Run OWASP Dependency Check
+      run: mvn dependency-check:check
+
+    - name: Archive OWASP results
+      uses: actions/upload-artifact@v4
+      with:
+        name: owasp-dependency-check-report
+        path: '**/target/dependency-check/**'
+        retention-days: 90
