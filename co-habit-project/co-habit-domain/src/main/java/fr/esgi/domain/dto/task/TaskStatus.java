@@ -1,21 +1,18 @@
 package fr.esgi.domain.dto.task;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
-@Schema(description = "Statut de la tâche")
 public enum TaskStatus {
-    PENDING("En attente"),
+    TODO("À faire"),
     IN_PROGRESS("En cours"),
     COMPLETED("Terminée"),
     CANCELLED("Annulée");
     
-    private final String value;
+    private final String frenchLabel;
     
-    TaskStatus(String value) {
-        this.value = value;
+    TaskStatus(String frenchLabel) {
+        this.frenchLabel = frenchLabel;
     }
     
-    public String getValue() {
-        return value;
+    public String getFrenchLabel() {
+        return frenchLabel;
     }
 }

@@ -1,16 +1,18 @@
 package fr.esgi.persistence.document;
 
+import fr.esgi.persistence.entity.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Document(indexName = "tasks")
@@ -54,7 +56,7 @@ public class TaskDocument {
     private LocalDateTime createdAt;
 
     @Field(type = FieldType.Date, name = "due_date")
-    private LocalDate dueDate;
+    private LocalDateTime dueDate;
 
     @Field(type = FieldType.Date, name = "completed_at")
     private LocalDateTime completedAt;
@@ -63,13 +65,13 @@ public class TaskDocument {
     private Long creatorId;
 
     @Field(type = FieldType.Long)
-    private Set<Long> assignedUserIds;
+    private Set<Long> assignedUserIds = new HashSet<>();
 
     @Field(type = FieldType.Keyword, name = "assigned_to_user_keycloak_subs")
-    private Set<String> assignedToUserKeycloakSubs;
+    private Set<String> assignedToUserKeycloakSubs = new HashSet<>();
 
     @Field(type = FieldType.Keyword)
-    private Set<String> tags;
+    private Set<String> tags = new HashSet<>();
 
     public enum TaskPriority {
         LOW,
@@ -83,5 +85,21 @@ public class TaskDocument {
         IN_PROGRESS,
         COMPLETED,
         CANCELLED
+    }
+
+    @Transient
+    public boolean isRoommate(Set<Long> colocationsId) {
+        return colocationsId.contains(this.getColocationId());
+    }
+
+    public void addAssignedUser(User user) {
+        if (assignedToUserKeycloakSubs == null) {
+            assignedToUserKeycloakSubs = Set.of();
+        }
+        if (assignedUserIds == null) {
+            assignedUserIds = Set.of();
+        }
+        assignedToUserKeycloakSubs.add(user.getKeyCloakSub());
+        assignedUserIds.add(user.getId());
     }
 }

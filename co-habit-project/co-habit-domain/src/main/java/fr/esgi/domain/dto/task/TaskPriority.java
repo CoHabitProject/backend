@@ -1,21 +1,18 @@
 package fr.esgi.domain.dto.task;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
-@Schema(description = "Priorité de la tâche")
 public enum TaskPriority {
     LOW("Faible"),
     MEDIUM("Moyenne"),
     HIGH("Élevée"),
-    URGENT("Urgente");
+    URGENT("Urgent");
     
-    private final String value;
+    private final String frenchLabel;
     
-    TaskPriority(String value) {
-        this.value = value;
+    TaskPriority(String frenchLabel) {
+        this.frenchLabel = frenchLabel;
     }
     
-    public String getValue() {
-        return value;
+    public String getFrenchLabel() {
+        return frenchLabel;
     }
 }
