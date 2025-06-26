@@ -38,7 +38,7 @@ spring:
       - http://localhost:9200
 
 elasticsearch:
-  enabled: false
+  enabled: true
 
 # Configuration CORS
 cors:
