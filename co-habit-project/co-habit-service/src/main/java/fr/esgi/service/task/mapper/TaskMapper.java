@@ -21,7 +21,7 @@ public interface TaskMapper {
     
     @Mapping(target = "createdAt", source = "createdAt", qualifiedByName = "localDateTimeToString")
     @Mapping(target = "completedAt", source = "completedAt", qualifiedByName = "localDateTimeToString")
-    @Mapping(target = "dueDate", source = "dueDate", qualifiedByName = "localDateTimeToString")
+    @Mapping(target = "dueDate", source = "dueDate")
     @Mapping(target = "assignedUsers", ignore = true)
     TaskResDto toTaskResDto(TaskDocument taskDocument);
     
