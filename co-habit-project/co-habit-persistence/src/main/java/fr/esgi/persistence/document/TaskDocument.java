@@ -70,4 +70,18 @@ public class TaskDocument {
 
     @Field(type = FieldType.Keyword)
     private Set<String> tags;
+
+    public enum TaskPriority {
+        LOW,
+        MEDIUM,
+        HIGH,
+        URGENT
+    }
+
+    public enum TaskStatus {
+        TODO,
+        IN_PROGRESS,
+        COMPLETED,
+        CANCELLED
+    }
 }
