@@ -67,6 +67,7 @@
         <swagger-annotations-jakarta>2.2.30</swagger-annotations-jakarta>
         <assertj.core>3.27.3</assertj.core>
         <spring.version>6.2.8</spring.version>
+        <postgresql.version>42.7.7</postgresql.version>
     </properties>
 
     <dependencyManagement>
@@ -90,6 +91,12 @@
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
                 <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgresql.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
