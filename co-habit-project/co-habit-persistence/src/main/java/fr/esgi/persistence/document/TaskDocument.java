@@ -94,10 +94,10 @@ public class TaskDocument {
 
     public void addAssignedUser(User user) {
         if (assignedToUserKeycloakSubs == null) {
-            assignedToUserKeycloakSubs = Set.of();
+            assignedToUserKeycloakSubs = new HashSet<>();
         }
         if (assignedUserIds == null) {
-            assignedUserIds = Set.of();
+            assignedUserIds = new HashSet<>();
         }
         assignedToUserKeycloakSubs.add(user.getKeyCloakSub());
         assignedUserIds.add(user.getId());
