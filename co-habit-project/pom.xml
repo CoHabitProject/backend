@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.3</version>
+        <version>3.4.6</version>
     </parent>
 
     <groupId>fr.esgi</groupId>
@@ -57,7 +57,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <keycloak-admin-client>22.0.1</keycloak-admin-client>
-        <spring.boot.version>3.4.3</spring.boot.version>
+        <spring.boot.version>3.4.6</spring.boot.version>
         <lombok.version>1.18.34</lombok.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <junit-jupiter.version>5.12.0</junit-jupiter.version>
@@ -66,10 +66,17 @@
         <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
         <swagger-annotations-jakarta>2.2.30</swagger-annotations-jakarta>
         <assertj.core>3.27.3</assertj.core>
+        <spring.version>6.2.8</spring.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -107,7 +114,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-        
+
         <!-- JUnit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -154,7 +161,7 @@
                         <mainClass>fr.esgi.domain.CoHabitApplication</mainClass>
                     </configuration>
                 </plugin>
-                
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -167,7 +174,7 @@
                         </excludes>
                     </configuration>
                 </plugin>
-                
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
@@ -183,6 +190,39 @@
                             <goals>
                                 <goal>integration-test</goal>
                                 <goal>verify</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- Security OWASP -->
+                <plugin>
+                    <groupId>org.owasp</groupId>
+                    <artifactId>dependency-check-maven</artifactId>
+                    <version>12.1.1</version>
+                    <configuration>
+                        <failBuildOnCVSS>7</failBuildOnCVSS>
+                        <formats>
+                            <format>HTML</format>
+                            <format>XML</format>
+                            <format>JSON</format>
+                        </formats>
+                        <outputDirectory>${project.build.directory}/dependency-check</outputDirectory>
+                        <!-- Add NVD API Key configuration -->
+                        <!-- <nvdApiKey>54c1d3dd-****-****-****-ead991f45afe</nvdApiKey>-->
+                        <scanSet>
+                            <fileSet>
+                                <directory>${project.basedir}</directory>
+                                <includes>
+                                    <include>**/*.jar</include>
+                                </includes>
+                            </fileSet>
+                        </scanSet>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>check</goal>
                             </goals>
                         </execution>
                     </executions>
