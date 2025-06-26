@@ -35,7 +35,7 @@ public interface TaskMapper {
     @Mapping(target = "completedAt", ignore = true)
     @Mapping(target = "creatorId", ignore = true)
     @Mapping(target = "assignedToUserKeycloakSubs", ignore = true)
-    @Mapping(target = "dueDate", source = "dueDate", qualifiedByName = "localDateTimeToLocalDate")
+    @Mapping(target = "dueDate", source = "dueDate")
     TaskDocument toTaskDocument(TaskReqDto taskReqDto);
     
     @Mapping(target = "assignedUsers", source = "assignedUsers")
