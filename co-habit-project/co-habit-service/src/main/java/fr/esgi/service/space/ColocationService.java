@@ -37,7 +37,7 @@ public class ColocationService extends AbstractService {
 
         Colocation colocation = colocationMapper.mapDtoToColocation(dto);
         colocation.setManager(manager);
-        colocation.setInvitationCode(generateInvitationCode());
+        colocation.generateInvitationCode(colocationRepository);
 
         // Add manager as first roommate
         colocation.addRoommate(manager);
@@ -188,12 +188,5 @@ public class ColocationService extends AbstractService {
 
         colocation.removeRoommate(user);
         colocationRepository.save(colocation);
-    }
-
-    private String generateInvitationCode() {
-        return UUID.randomUUID()
-                   .toString()
-                   .substring(0, 5)
-                   .toUpperCase();
     }
 }

@@ -28,8 +28,11 @@ import org.springframework.test.context.TestPropertySource;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 @DataJpaTest
 @Import(ColocationServiceTest.TestConfig.class)
@@ -74,6 +77,12 @@ public class ColocationServiceTest extends AbstractTest {
     private User roommateUser;
     private User otherUser;
 
+    // Variables for mock tests
+    private User             testUser;
+    private ColocationReqDto colocationReqDto;
+    private Colocation       colocation;
+    private ColocationMapper colocationMapper;
+
     @BeforeEach
     public void initUsers() {
         // Setup manager user
@@ -99,6 +108,24 @@ public class ColocationServiceTest extends AbstractTest {
         otherUser.setLastName("Other");
         otherUser.setKeyCloakSub("other-sub");
         otherUser.setBirthDate(LocalDate.of(1988, 1, 1));
+
+        // Setup for specific tests - don't set ID, let JPA generate it
+        testUser = new User();
+        testUser.setKeyCloakSub("test-user-sub");
+        testUser.setEmail("test@example.com");
+        testUser.setFirstName("Test");
+        testUser.setLastName("User");
+        testUser.setBirthDate(LocalDate.of(1990, 1, 1));
+
+        colocationReqDto = new ColocationReqDto();
+        colocationReqDto.setName("Test Colocation");
+        colocationReqDto.setAddress("123 Test Street");
+
+        colocation = new Colocation();
+        colocation.setName("Test Colocation");
+        colocation.setAddress("123 Test Street");
+
+        colocationMapper = mock(ColocationMapper.class);
     }
 
     @AfterEach
@@ -650,5 +677,103 @@ public class ColocationServiceTest extends AbstractTest {
 
         assertEquals(401, exception.getCode());
         assertEquals("User is not authenticated", exception.getMessage());
+    }
+
+    @Test
+    void createColocation_shouldGenerateUniqueInvitationCode_whenCodeAlreadyExists() throws
+                                                                                     TechnicalException {
+        // Given
+        testUser = userRepository.save(testUser); // Save and get managed entity
+        this.initSecurityContextPlaceHolderWithSub("test-user-sub");
+
+        // Create existing colocation with specific invitation code
+        Colocation existingColocation = new Colocation("Existing", "Address", testUser);
+        existingColocation.setInvitationCode(UUID.randomUUID()
+                                                 .toString()
+                                                 .substring(0, 5)
+                                                 .toUpperCase());
+        colocationRepository.save(existingColocation);
+
+        ColocationReqDto dto = new ColocationReqDto();
+        dto.setName("New Colocation");
+        dto.setAddress("New Address");
+
+        // When
+        ColocationResDto result = colocationService.createColocation(dto);
+
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result.getInvitationCode()).isNotNull();
+        assertThat(result.getInvitationCode()).isNotEqualTo("EXIST");
+        assertThat(result.getInvitationCode()
+                         .length()).isEqualTo(5);
+
+        // Verify the invitation code is unique
+        Optional<Colocation> savedColocation = colocationRepository.findByInvitationCode(result.getInvitationCode());
+        assertThat(savedColocation).isPresent();
+        assertThat(savedColocation.get()
+                                  .getName()).isEqualTo("New Colocation");
+    }
+
+    @Test
+    void createColocation_shouldSaveColocationWithGeneratedCode() throws
+                                                                  TechnicalException {
+        // Given
+        testUser = userRepository.save(testUser); // Save and get managed entity
+        this.initSecurityContextPlaceHolderWithSub("test-user-sub");
+
+        ColocationReqDto dto = new ColocationReqDto();
+        dto.setName("Test Colocation");
+        dto.setAddress("123 Test Street");
+        dto.setCity("Test City");
+        dto.setPostalCode("12345");
+
+        // When
+        ColocationResDto result = colocationService.createColocation(dto);
+
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result.getId()).isNotNull();
+        assertThat(result.getName()).isEqualTo("Test Colocation");
+        assertThat(result.getAddress()).isEqualTo("123 Test Street");
+        assertThat(result.getCity()).isEqualTo("Test City");
+        assertThat(result.getPostalCode()).isEqualTo("12345");
+        assertThat(result.getInvitationCode()).isNotNull();
+        assertThat(result.getInvitationCode()
+                         .length()).isEqualTo(5);
+
+        // Verify in database
+        Optional<Colocation> savedColocation = colocationRepository.findById(result.getId());
+        assertThat(savedColocation).isPresent();
+        assertThat(savedColocation.get()
+                                  .getManager()
+                                  .getId()).isEqualTo(testUser.getId());
+        assertThat(savedColocation.get()
+                                  .getInvitationCode()).hasSize(5);
+    }
+
+    @Test
+    void createColocation_shouldAddManagerAsRoommate() throws
+                                                       TechnicalException {
+        // Given
+        testUser = userRepository.save(testUser); // Save and get managed entity
+        this.initSecurityContextPlaceHolderWithSub("test-user-sub");
+
+        ColocationReqDto dto = new ColocationReqDto();
+        dto.setName("Test Colocation");
+        dto.setAddress("123 Test Street");
+
+        // When
+        ColocationResDto result = colocationService.createColocation(dto);
+
+        // Then
+        Optional<Colocation> savedColocation = colocationRepository.findById(result.getId());
+        assertThat(savedColocation).isPresent();
+        assertThat(savedColocation.get()
+                                  .getRoommates()).anyMatch(user -> user.getId()
+                                                                        .equals(testUser.getId()));
+        assertThat(savedColocation.get()
+                                  .getManager()
+                                  .getId()).isEqualTo(testUser.getId());
     }
 }

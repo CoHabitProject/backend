@@ -1,16 +1,14 @@
 package fr.esgi.persistence.entity.space;
 
 import fr.esgi.persistence.entity.user.User;
+import fr.esgi.persistence.repository.space.ColocationRepository;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "colocations")
@@ -117,5 +115,20 @@ public class Colocation {
     public void removeStock(StockEntity stock) {
         stocks.remove(stock);
         stock.setColocation(null);
+    }
+
+    /**
+     * Generates and sets a unique invitation code for the colocation
+     */
+    public void generateInvitationCode(ColocationRepository repository) {
+        String code;
+        do {
+            code = UUID.randomUUID()
+                      .toString()
+                      .substring(0, 5)
+                      .toUpperCase();
+        } while (repository.findByInvitationCode(code).isPresent());
+        
+        this.invitationCode = code;
     }
 }
