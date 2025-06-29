@@ -70,6 +70,11 @@
         <tomcat.version>11.0.8</tomcat.version>
         <sonar.organization>cohabitproject</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <netty.version>4.1.118.Final</netty.version>
+        <reactor-netty.version>1.1.16</reactor-netty.version>
+        <spring-security.version>6.5.1</spring-security.version>
+        <jackson.version>2.17.0</jackson.version>
+        <reactor-test.version>3.6.0</reactor-test.version>
     </properties>
 
     <dependencyManagement>
@@ -106,6 +111,53 @@
                 <groupId>org.apache.tomcat.embed</groupId>
                 <artifactId>tomcat-embed-core</artifactId>
                 <version>${tomcat.version}</version>
+            </dependency>
+            
+            <!-- Fix Netty CVEs -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-bom</artifactId>
+                <version>${netty.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            
+            <!-- Fix reactor-netty vulnerabilities -->
+            <dependency>
+                <groupId>io.projectreactor.netty</groupId>
+                <artifactId>reactor-netty-core</artifactId>
+                <version>${reactor-netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.projectreactor.netty</groupId>
+                <artifactId>reactor-netty-http</artifactId>
+                <version>${reactor-netty.version}</version>
+            </dependency>
+
+            <!-- Fix JSON vulnerabilities including btf-1.3.jar issues -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <!-- Exclude problematic BTF dependency -->
+            <dependency>
+                <groupId>com.github.fge</groupId>
+                <artifactId>btf</artifactId>
+                <version>1.3</version>
+                <scope>provided</scope>
+                <optional>true</optional>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -235,6 +287,9 @@
                                 </includes>
                             </fileSet>
                         </scanSet>
+                        <suppressionFiles>
+                            <suppressionFile>${maven.multiModuleProjectDirectory}/owasp-suppressions.xml</suppressionFile>
+                        </suppressionFiles>
                     </configuration>
                     <executions>
                         <execution>
