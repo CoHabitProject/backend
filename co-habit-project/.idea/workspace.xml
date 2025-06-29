@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="304ed2b1-7377-4180-b3e2-d995c9fb5c66" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/dto/user/UserRelationshipReqDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/dto/user/UserRelationshipReqDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-persistence/src/main/java/fr/esgi/persistence/repository/user/UserRelationshipRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-persistence/src/main/java/fr/esgi/persistence/repository/user/UserRelationshipRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/interne/UserRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/interne/UserRest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/space/UserRelationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/space/UserRelationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-service/src/test/java/fr/esgi/service/AbstractTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-service/src/test/java/fr/esgi/service/AbstractTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-service/src/test/java/fr/esgi/service/space/UserRelationServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-service/src/test/java/fr/esgi/service/space/UserRelationServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.github/workflows/backend.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../.github/workflows/backend.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +28,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Bertrand2808"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/CoHabitProject/backend.git",
+    "accountId": "772f2af0-ad5e-435c-8af1-bd136f2f3b3e"
+  }
+}]]></component>
   <component name="JpbToolWindowState">
     <option name="isToolWindowVisible" value="false" />
   </component>
@@ -75,6 +81,7 @@
     "Maven.co-habit-domain [compile].executor": "Run",
     "Maven.co-habit-domain [verify].executor": "Run",
     "Maven.co-habit-persistence [test].executor": "Run",
+    "Maven.co-habit-project [-B,verify...].executor": "Run",
     "Maven.co-habit-project [clean,install].executor": "Run",
     "Maven.co-habit-project [clean,test].executor": "Run",
     "Maven.co-habit-project [clean].executor": "Run",
@@ -82,6 +89,7 @@
     "Maven.co-habit-project [dependency-check:check].executor": "Run",
     "Maven.co-habit-project [install].executor": "Run",
     "Maven.co-habit-project [test].executor": "Run",
+    "Maven.co-habit-project [verify...].executor": "Run",
     "Maven.co-habit-project [verify].executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
@@ -91,9 +99,9 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.CoHabitApplication.executor": "Run",
-    "git-widget-placeholder": "feature__create-space-colocation",
+    "git-widget-placeholder": "update-cicd",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/ds/0_workspace/_IntellJ/perojet-annuel/backend/co-habit-project",
+    "last_opened_file_path": "E:/Documents_HDD/ssd/Cours_ESGI/M2/S2/Projet/Projet/backend/co-habit-project",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -129,6 +137,12 @@
       <recent name="fr.esgi.rest.global" />
       <recent name="fr.esgi.persistence.repository" />
     </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=CoHabitProject_backend" />
+      <command value="mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=CoHabitProject_backend" />
+    </option>
   </component>
   <component name="RunManager" selected="Spring Boot.CoHabitApplication">
     <configuration name="UserRelationServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
@@ -243,8 +257,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.24807.4" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.24807.4" />
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.145" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.145" />
       </set>
     </attachedChunks>
   </component>
@@ -267,6 +281,7 @@
       <workItem from="1748596464250" duration="5751000" />
       <workItem from="1748614624629" duration="1281000" />
       <workItem from="1750495025658" duration="5885000" />
+      <workItem from="1751211384319" duration="874000" />
     </task>
     <servers />
   </component>

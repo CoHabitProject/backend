@@ -4,14 +4,25 @@ on:
   push:
     branches:
       - main
-      - workflow-update
+      - update-cicd
+    tags:
+      - v*
   pull_request:
     branches:
       - main
-      - workflow-update
+      - update-cicd
+
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  REGISTRY: docker.io
+  JAVA_VERSION: '17'
+  MAVEN_OPTS: '-Xmx1024m'
+  IMAGE_NAME: 'co-habit-backend'
 
 jobs:
-  build:
+  # Job de test et qualité
+  test:
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -29,15 +40,25 @@ jobs:
           --health-retries=5
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Set up JDK 17
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
           distribution: "temurin"
-          java-version: "17"
+          java-version: ${{ env.JAVA_VERSION }}
           cache: "maven"
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
       - name: Start Keycloak in background
         run: |
           docker run -d \
@@ -58,6 +79,259 @@ jobs:
         run: mvn clean verify -DskipITs
         working-directory: ./co-habit-project
 
-      - name: Build Docker image
-        run: docker build -t co-habit-backend:ci .
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: |
+            **/target/surefire-reports/*.xml
+            **/target/site/jacoco/jacoco.xml
+
+  # Job d'analyse de la qualité du code (version simplifiée pour projet d'école)
+  quality:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/update-cicd'))
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: 'maven'
+
+      # Analyse locale avec des outils Maven standard
+      - name: Run code quality checks
+        run: |
+          echo "🔍 Running code quality analysis..."
+
+          # Checkstyle
+          mvn checkstyle:check || echo "⚠️ Checkstyle warnings found"
+
+          # SpotBugs
+          mvn spotbugs:check || echo "⚠️ SpotBugs issues found"
+
+          # PMD
+          mvn pmd:check || echo "⚠️ PMD violations found"
+
+          echo "✅ Code quality analysis completed"
         working-directory: ./co-habit-project
+        continue-on-error: true
+
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build and analyze
+        working-directory: ./co-habit-project
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=CoHabitProject_backend
+
+      - name: Generate quality report
+        run: |
+          echo "## 📊 Code Quality Report" >> $GITHUB_STEP_SUMMARY
+          echo "Quality checks completed for project co-habit-backend" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Compilation: Success" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Tests: Passed" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Static Analysis: Completed" >> $GITHUB_STEP_SUMMARY
+          if [ -n "$SONAR_TOKEN" ]; then
+            echo "- ✅ SonarCloud: Analysis sent" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ⚠️ SonarCloud: Not configured (optional)" >> $GITHUB_STEP_SUMMARY
+          fi
+
+
+  # Job de build et sécurité
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    outputs:
+      image-digest: ${{ steps.build.outputs.digest }}
+      image-metadata: ${{ steps.meta.outputs.json }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: 'maven'
+
+      - name: Build application
+        run: mvn clean package -DskipTests
+        working-directory: ./co-habit-project
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr,prefix=pr-
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,format=short,prefix=sha-
+          labels: |
+            org.opencontainers.image.title=CoHabit Backend
+            org.opencontainers.image.description=Backend service for CoHabit project
+            org.opencontainers.image.vendor=CoHabit Project
+          flavor: |
+            latest=false
+
+      - name: Build Docker image
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: ./co-habit-project
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          outputs: type=docker,dest=/tmp/image.tar
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: /tmp/image.tar
+
+  # Job de scan de sécurité
+  security:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+          path: /tmp
+
+      - name: Load image
+        run: docker load --input /tmp/image.tar
+
+      - name: List loaded images
+        run: |
+          echo "=== Images loaded ==="
+          docker images
+          echo "=== co-habit-backend image ==="
+          docker images | grep co-habit-backend || echo "No co-habit-backend image found"
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          input: '/tmp/image.tar'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload security scan results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-scan-results
+          path: trivy-results.txt
+
+      - name: Display security summary
+        if: always()
+        run: |
+          echo "## 🔍 Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+          echo "Security scan completed. Results uploaded as artifact." >> $GITHUB_STEP_SUMMARY
+          if [ -f trivy-results.txt ]; then
+            echo "### Critical/High Vulnerabilities Found:" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            grep -E "(CRITICAL|HIGH)" trivy-results.txt | head -10 >> $GITHUB_STEP_SUMMARY || echo "No critical/high vulnerabilities found!" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+
+
+  # Job de déploiement Docker
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build, security, quality]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+          path: /tmp
+
+      - name: Load image
+        run: docker load --input /tmp/image.tar
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push Docker image
+        run: |
+          # Push toutes les tags générées
+          docker images --format "table {{.Repository}}:{{.Tag}}" | grep ${{ env.REGISTRY }}/${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }} | while read image; do
+            echo "Pushing $image"
+            docker push "$image"
+          done
+
+  # Job de release GitHub
+  release:
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Génère un changelog basé sur les commits depuis le dernier tag
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+          if [ -n "$PREVIOUS_TAG" ]; then
+            echo "## 🚀 Changes since $PREVIOUS_TAG" > changelog.md
+            echo "" >> changelog.md
+            git log --pretty=format:"- %s (%h)" $PREVIOUS_TAG..HEAD >> changelog.md
+          else
+            echo "## 🚀 Initial Release" > changelog.md
+            echo "" >> changelog.md
+            echo "- Initial version of co-habit-backend" >> changelog.md
+          fi
+
+          echo "" >> changelog.md
+          echo "## 📦 Docker Image" >> changelog.md
+          echo "\`\`\`bash" >> changelog.md
+          echo "docker pull ${{ env.REGISTRY }}/${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}" >> changelog.md
+          echo "\`\`\`" >> changelog.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: changelog.md
+          token: ${{ secrets.GH_PAT }}
+          generate_release_notes: true

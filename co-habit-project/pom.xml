@@ -55,7 +55,6 @@
         <maven.compiler.source>23</maven.compiler.source>
         <maven.compiler.target>23</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
         <keycloak-admin-client>22.0.1</keycloak-admin-client>
         <spring.boot.version>3.4.6</spring.boot.version>
         <lombok.version>1.18.34</lombok.version>
@@ -69,6 +68,8 @@
         <spring.version>6.2.8</spring.version>
         <postgresql.version>42.7.7</postgresql.version>
         <tomcat.version>11.0.8</tomcat.version>
+        <sonar.organization>cohabitproject</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <netty.version>4.1.118.Final</netty.version>
         <reactor-netty.version>1.1.16</reactor-netty.version>
         <spring-security.version>6.5.1</spring-security.version>
@@ -191,6 +192,7 @@
             <version>${junit-jupiter.version}</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -295,6 +297,25 @@
                         <execution>
                             <goals>
                                 <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.8</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>report</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>report</goal>
                             </goals>
                         </execution>
                     </executions>
