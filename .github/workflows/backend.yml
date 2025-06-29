@@ -203,17 +203,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: [build, security]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: docker-image
-          path: /tmp
+      - uses: actions/checkout@v4
 
-      - name: Load image
-        run: docker load --input /tmp/image.tar
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -221,19 +216,22 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push Docker image
-        run: |
-          # Push toutes les tags générées
-          docker images --format "table {{.Repository}}:{{.Tag}}" | grep ${{ env.REGISTRY }}/${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }} | while read image; do
-            echo "Pushing $image"
-            docker push "$image"
-          done
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./co-habit-project
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/co-habit-backend:latest
+            ${{ secrets.DOCKER_USERNAME }}/co-habit-backend:${{ github.ref_name }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   # Job de release GitHub
   release:
     runs-on: ubuntu-latest
     needs: deploy
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && startsWith(github.ref, 'refs/tags/')
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
 
     steps:
       - name: Checkout code
