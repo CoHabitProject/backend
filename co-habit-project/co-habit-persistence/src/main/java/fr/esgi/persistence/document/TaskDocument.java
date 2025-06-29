@@ -82,6 +82,7 @@ public class TaskDocument {
 
     public enum TaskStatus {
         TODO,
+        PENDING,
         IN_PROGRESS,
         COMPLETED,
         CANCELLED
