@@ -1,4 +1,4 @@
-package fr.esgi.domain.util;
+package fr.esgi.domain;
 
 import fr.esgi.domain.exception.TechnicalException;
 
@@ -12,9 +12,9 @@ import java.time.format.DateTimeParseException;
  */
 public class DateUtils {
 
-    private static final String            DEFAULT_DATE_PATTERN     = "yyyy-MM-dd";
-    private static final String            DEFAULT_DATETIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    private static final DateTimeFormatter DEFAULT_FORMATTER        = DateTimeFormatter.ofPattern(DEFAULT_DATE_PATTERN);
+    public static final  String            DEFAULT_DATE_PATTERN       = "yyyy-MM-dd";
+    public static final  String            DEFAULT_DATETIME_PATTERN   = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    private static final DateTimeFormatter DEFAULT_FORMATTER          = DateTimeFormatter.ofPattern(DEFAULT_DATE_PATTERN);
     private static final DateTimeFormatter DEFAULT_DATETIME_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_DATETIME_PATTERN);
 
     private DateUtils() {

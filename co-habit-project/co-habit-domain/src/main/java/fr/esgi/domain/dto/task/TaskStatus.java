@@ -2,6 +2,7 @@ package fr.esgi.domain.dto.task;
 
 public enum TaskStatus {
     TODO("À faire"),
+    PENDING("En attent"),
     IN_PROGRESS("En cours"),
     COMPLETED("Terminée"),
     CANCELLED("Annulée");

@@ -1,10 +1,10 @@
 package fr.esgi.service.space;
 
+import fr.esgi.domain.DateUtils;
 import fr.esgi.domain.dto.user.UserRelationshipReqDto;
 import fr.esgi.domain.dto.user.UserRelationshipResDto;
 import fr.esgi.domain.exception.TechnicalException;
 import fr.esgi.domain.port.in.IUserRelationService;
-import fr.esgi.domain.util.DateUtils;
 import fr.esgi.persistence.entity.user.User;
 import fr.esgi.persistence.entity.user.UserRelationship;
 import fr.esgi.persistence.repository.user.UserRelationshipRepository;

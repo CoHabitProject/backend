@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -35,8 +34,8 @@ public class TaskReqDto {
     @Schema(description = "Priorité de la tâche", example = "HIGH")
     private TaskPriority priority;
     
-    @Schema(description = "Date d'échéance", example = "2025-12-31")
-    private LocalDateTime dueDate;
+    @Schema(description = "Date d'échéance", example = "2025-06-25T08:20:41.678Z")
+    private String dueDate;
     
     @Schema(description = "IDs des utilisateurs assignés")
     private Set<Long> assignedUserIds;
