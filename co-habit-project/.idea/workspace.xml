@@ -4,8 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="304ed2b1-7377-4180-b3e2-d995c9fb5c66" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../.github/workflows/backend.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../.github/workflows/backend.yml" afterDir="false" />
+    <list default="true" id="304ed2b1-7377-4180-b3e2-d995c9fb5c66" name="Changes" comment="Add Stock &amp; Colocation Mappers tests">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/dto/task/TaskReqDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/dto/task/TaskReqDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/dto/task/TaskResDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/dto/task/TaskResDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/dto/task/TaskStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-domain/src/main/java/fr/esgi/domain/dto/task/TaskStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/task/TaskService.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/task/TaskService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-service/src/test/java/fr/esgi/service/task/TaskServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-service/src/test/java/fr/esgi/service/task/TaskServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +31,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="GitHubPullRequestSearchHistory"><![CDATA[{
@@ -65,6 +75,8 @@
     "JUnit.KeycloakAuthServiceTest.executor": "Run",
     "JUnit.ProfileDiagnostic.executor": "Run",
     "JUnit.ProfileRestTest.executor": "Run",
+    "JUnit.TaskRestTest.executor": "Run",
+    "JUnit.TaskServiceTest.executor": "Run",
     "JUnit.TechnicalExceptionTest.executor": "Run",
     "JUnit.TokenExceptionTest.executor": "Run",
     "JUnit.UserRelationServiceTest.executor": "Run",
@@ -99,7 +111,9 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.CoHabitApplication.executor": "Run",
-    "git-widget-placeholder": "update-cicd",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "git-widget-placeholder": "#16 on feature__task-rest-controller",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "E:/Documents_HDD/ssd/Cours_ESGI/M2/S2/Projet/Projet/backend/co-habit-project",
     "node.js.detected.package.eslint": "true",
@@ -107,7 +121,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
+    "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
     "settings.editor.selected.configurable": "actions.on.save",
@@ -131,20 +145,44 @@
       <recent name="fr.esgi.persistence" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="fr.esgi.rest.interne" />
       <recent name="fr.esgi.service.registration" />
       <recent name="fr.esgi.security.service" />
-      <recent name="fr.esgi.rest.interne" />
       <recent name="fr.esgi.rest.global" />
       <recent name="fr.esgi.persistence.repository" />
     </key>
   </component>
-  <component name="RunAnythingCache">
-    <option name="myCommands">
-      <command value="mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=CoHabitProject_backend" />
-      <command value="mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=CoHabitProject_backend" />
-    </option>
-  </component>
-  <component name="RunManager" selected="Spring Boot.CoHabitApplication">
+  <component name="RunManager" selected="JUnit.TaskServiceTest">
+    <configuration name="TaskRestTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="co-habit-rest" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="fr.esgi.rest.interne.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="fr.esgi.rest.interne" />
+      <option name="MAIN_CLASS_NAME" value="fr.esgi.rest.interne.TaskRestTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TaskServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="co-habit-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="fr.esgi.service.task.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="fr.esgi.service.task" />
+      <option name="MAIN_CLASS_NAME" value="fr.esgi.service.task.TaskServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="UserRelationServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="co-habit-service" />
       <extension name="coverage">
@@ -190,38 +228,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="UserRepositoryLocalDbTest.shouldCreateParentChildRelationship" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="co-habit-persistence" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="fr.esgi.persistence.repository.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="fr.esgi.persistence.repository" />
-      <option name="MAIN_CLASS_NAME" value="fr.esgi.persistence.repository.UserRepositoryLocalDbTest" />
-      <option name="METHOD_NAME" value="shouldCreateParentChildRelationship" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="UserRepositoryLocalDbTest.shouldFindAllParentsWithConfirmedRelationships" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="co-habit-persistence" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="fr.esgi.persistence.repository.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="fr.esgi.persistence.repository" />
-      <option name="MAIN_CLASS_NAME" value="fr.esgi.persistence.repository.UserRepositoryLocalDbTest" />
-      <option name="METHOD_NAME" value="shouldFindAllParentsWithConfirmedRelationships" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="CoHabitApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="co-habit-application" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="fr.esgi.CoHabitApplication" />
@@ -237,20 +243,20 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="JUnit.TaskRestTest" />
+      <item itemvalue="JUnit.TaskServiceTest" />
       <item itemvalue="JUnit.UserRelationServiceTest" />
       <item itemvalue="JUnit.UserRepositoryLocalDbTest" />
-      <item itemvalue="JUnit.UserRepositoryLocalDbTest.shouldCreateParentChildRelationship" />
-      <item itemvalue="JUnit.UserRepositoryLocalDbTest.shouldFindAllParentsWithConfirmedRelationships" />
       <item itemvalue="JUnit.UserRepositoryInMemoryTest" />
       <item itemvalue="Spring Boot.CoHabitApplication" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.TaskServiceTest" />
+        <item itemvalue="JUnit.TaskRestTest" />
         <item itemvalue="JUnit.UserRelationServiceTest" />
         <item itemvalue="JUnit.UserRepositoryInMemoryTest" />
         <item itemvalue="JUnit.UserRepositoryLocalDbTest" />
-        <item itemvalue="JUnit.UserRepositoryLocalDbTest.shouldCreateParentChildRelationship" />
-        <item itemvalue="JUnit.UserRepositoryLocalDbTest.shouldFindAllParentsWithConfirmedRelationships" />
       </list>
     </recent_temporary>
   </component>
@@ -324,5 +330,13 @@
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
     <select />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/co_habit_project$StockMapperTest.ic" NAME="StockMapperTest Coverage Results" MODIFIED="1751274186824" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>fr.esgi.service.space.mapper.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/co_habit_project$ColocationMapperTest.ic" NAME="ColocationMapperTest Coverage Results" MODIFIED="1751273214570" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>fr.esgi.service.space.mapper.*</FILTER>
+    </SUITE>
   </component>
 </project>

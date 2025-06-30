@@ -6,14 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@SuperBuilder
 @Schema(description = "Réponse de tâche")
 public class TaskResDto extends TaskReqDto {
     @Schema(description = "Identifiant unique de la tâche", example = "1")

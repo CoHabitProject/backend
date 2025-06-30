@@ -2,6 +2,7 @@ package fr.esgi.service.task;
 
 import fr.esgi.domain.dto.task.TaskReqDto;
 import fr.esgi.domain.dto.task.TaskResDto;
+import fr.esgi.domain.dto.user.UserProfileResDto;
 import fr.esgi.domain.exception.TechnicalException;
 import fr.esgi.persistence.document.TaskDocument;
 import fr.esgi.persistence.entity.space.Colocation;
@@ -10,6 +11,7 @@ import fr.esgi.persistence.repository.space.ColocationRepository;
 import fr.esgi.persistence.repository.task.TaskRepository;
 import fr.esgi.persistence.repository.user.UserRepository;
 import fr.esgi.service.AbstractService;
+import fr.esgi.service.registration.mapper.UserMapper;
 import fr.esgi.service.task.mapper.TaskMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ public class TaskService extends AbstractService {
     private final UserRepository       userRepository;
     private final ColocationRepository colocationRepository;
     private final TaskMapper           taskMapper;
+    private final UserMapper           userMapper;
 
     /**
      * Creates a new task in a colocation
@@ -107,7 +110,11 @@ public class TaskService extends AbstractService {
             throw new TechnicalException(403, "Vous n'avez pas accès à cette tâche");
         }
 
-        return taskMapper.toTaskResDto(task);
+        List<User> users = userRepository.findAllById(task.getAssignedUserIds());
+        List<UserProfileResDto> assignedProfiles = userMapper
+                .mapUsersToProfileDtos(users);
+
+        return taskMapper.toTaskResDtoWithUsers(task,assignedProfiles);
     }
 
     /**
