@@ -1,5 +1,6 @@
 package fr.esgi.service.task;
 
+import fr.esgi.domain.DateUtils;
 import fr.esgi.domain.dto.task.TaskReqDto;
 import fr.esgi.domain.dto.task.TaskResDto;
 import fr.esgi.domain.dto.task.TaskStatus;
@@ -174,8 +175,8 @@ public class TaskServiceTest extends AbstractTest {
         TaskReqDto dto = new TaskReqDto();
         dto.setTitle("Clean Kitchen");
         dto.setDescription("Clean all dishes and surfaces");
-        dto.setDueDate(LocalDateTime.now()
-                                    .plusDays(7));
+        dto.setDueDate(DateUtils.localDateTimeToString(LocalDateTime.now()
+                                                                    .plusDays(7)));
         dto.setStatus(TaskStatus.TODO);
 
         TaskDocument savedTask = new TaskDocument();

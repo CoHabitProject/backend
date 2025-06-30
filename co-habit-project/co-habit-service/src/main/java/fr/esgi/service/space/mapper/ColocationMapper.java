@@ -1,9 +1,9 @@
 package fr.esgi.service.space.mapper;
 
+import fr.esgi.domain.DateUtils;
 import fr.esgi.domain.dto.space.ColocationReqDto;
 import fr.esgi.domain.dto.space.ColocationResDto;
 import fr.esgi.domain.dto.user.UserProfileResDto;
-import fr.esgi.domain.util.DateUtils;
 import fr.esgi.persistence.entity.space.Colocation;
 import fr.esgi.persistence.entity.user.User;
 import org.mapstruct.Mapper;

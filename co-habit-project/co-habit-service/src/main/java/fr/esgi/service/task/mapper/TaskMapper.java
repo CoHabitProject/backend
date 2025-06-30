@@ -16,12 +16,12 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
-    
+
     TaskMapper INSTANCE = Mappers.getMapper(TaskMapper.class);
-    
+
     @Mapping(target = "createdAt", source = "createdAt", qualifiedByName = "localDateTimeToString")
     @Mapping(target = "completedAt", source = "completedAt", qualifiedByName = "localDateTimeToString")
-    @Mapping(target = "dueDate", source = "dueDate")
+    @Mapping(target = "dueDate", source = "dueDate", qualifiedByName = "localDateTimeToISOString")
     @Mapping(target = "assignedUsers", ignore = true)
     TaskResDto toTaskResDto(TaskDocument taskDocument);
     
@@ -37,11 +37,11 @@ public interface TaskMapper {
     @Mapping(target = "assignedToUserKeycloakSubs", ignore = true)
     @Mapping(target = "dueDate", source = "dueDate")
     TaskDocument toTaskDocument(TaskReqDto taskReqDto);
-    
+
     @Mapping(target = "assignedUsers", source = "assignedUsers")
     @Mapping(target = "dueDate", source = "taskDocument.dueDate", qualifiedByName = "localDateToLocalDateTime")
     TaskResDto toTaskResDtoWithUsers(TaskDocument taskDocument, List<UserProfileResDto> assignedUsers);
-    
+
     @Named("localDateTimeToString")
     default String localDateTimeToString(LocalDateTime dateTime) {
         if (dateTime == null) {
@@ -51,11 +51,11 @@ public interface TaskMapper {
     }
     
     @Named("localDateToLocalDateTime")
-    default LocalDateTime localDateToLocalDateTime(LocalDate date) {
+    default String localDateToLocalDateTime(LocalDate date) {
         if (date == null) {
             return null;
         }
-        return date.atStartOfDay();
+        return date.toString();
     }
     
     @Named("localDateTimeToLocalDate")
@@ -65,12 +65,22 @@ public interface TaskMapper {
         }
         return dateTime.toLocalDate();
     }
-    
+
+    @Named("localDateTimeToISOString")
+    default String localDateTimeToISOString(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            return null;
+        }
+        return dateTime.toString();
+    }
+
     // Enum mappings
     default fr.esgi.domain.dto.task.TaskStatus mapStatus(TaskDocument.TaskStatus status) {
         if (status == null) return null;
         return fr.esgi.domain.dto.task.TaskStatus.valueOf(status.name());
     }
+
+
     
     default TaskDocument.TaskStatus mapStatus(fr.esgi.domain.dto.task.TaskStatus status) {
         if (status == null) return null;
