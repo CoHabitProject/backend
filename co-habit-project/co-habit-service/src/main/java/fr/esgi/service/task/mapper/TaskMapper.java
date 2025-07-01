@@ -11,6 +11,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -47,7 +48,8 @@ public interface TaskMapper {
         if (dateTime == null) {
             return null;
         }
-        return dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        return dateTime.atOffset(ZoneOffset.UTC)
+                .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
     
     @Named("localDateToLocalDateTime")
@@ -71,7 +73,8 @@ public interface TaskMapper {
         if (dateTime == null) {
             return null;
         }
-        return dateTime.toString();
+        return dateTime.atOffset(ZoneOffset.UTC)
+                .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
     // Enum mappings
