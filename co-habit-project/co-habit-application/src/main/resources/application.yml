@@ -25,7 +25,7 @@ spring:
   data:
     elasticsearch:
       repositories:
-        enabled: false
+        enabled: true
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -36,6 +36,8 @@ spring:
   elasticsearch: 
     uris:
       - http://localhost:9200
+    schema-management:
+      auto-create-index: true
 
 elasticsearch:
   enabled: true

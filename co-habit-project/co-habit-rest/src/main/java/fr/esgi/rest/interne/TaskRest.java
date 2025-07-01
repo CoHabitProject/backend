@@ -201,4 +201,20 @@ public class TaskRest {
                                               TechnicalException {
         return taskService.getUserTasks();
     }
+
+    @Operation(summary = "Récupérer les 3 tâches les plus récentes",
+        description = "Renvoie jusqu'à 3 tâches les plus récemment créées pour la colocation")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Liste des tâches récupérées"),
+            @ApiResponse(responseCode = "401", description = "Utilisateur non authentifié"),
+            @ApiResponse(responseCode = "403", description = "Accès refusé"),
+            @ApiResponse(responseCode = "404", description = "Colocation non trouvée")
+    })
+    @GetMapping("/recent")
+    public List<TaskResDto> getRecentTasks(
+            @Parameter(description = "ID de la colocation", required = true)
+            @PathVariable Long idCollocation) throws TechnicalException {
+        return taskService.getMostRecentTasks(idCollocation);
+    }
+
 }

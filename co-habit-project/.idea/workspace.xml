@@ -4,9 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="304ed2b1-7377-4180-b3e2-d995c9fb5c66" name="Changes" comment="Add Stock &amp; Colocation Mappers tests">
+    <list default="true" id="304ed2b1-7377-4180-b3e2-d995c9fb5c66" name="Changes" comment="Work on task">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-application/src/main/java/fr/esgi/config/JacksonConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-application/src/main/java/fr/esgi/config/JacksonConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-application/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-application/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-persistence/src/main/java/fr/esgi/persistence/document/TaskDocument.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-persistence/src/main/java/fr/esgi/persistence/document/TaskDocument.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-persistence/src/main/java/fr/esgi/persistence/repository/task/TaskRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-persistence/src/main/java/fr/esgi/persistence/repository/task/TaskRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/interne/TaskRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-rest/src/main/java/fr/esgi/rest/interne/TaskRest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/task/TaskService.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/task/TaskService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/task/mapper/TaskMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-service/src/main/java/fr/esgi/service/task/mapper/TaskMapper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -291,7 +295,8 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="Work on task" />
+    <option name="LAST_COMMIT_MESSAGE" value="Work on task" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

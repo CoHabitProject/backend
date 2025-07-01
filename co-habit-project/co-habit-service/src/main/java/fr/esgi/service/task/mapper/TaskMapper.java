@@ -36,7 +36,7 @@ public interface TaskMapper {
     @Mapping(target = "completedAt", ignore = true)
     @Mapping(target = "creatorId", ignore = true)
     @Mapping(target = "assignedToUserKeycloakSubs", ignore = true)
-    @Mapping(target = "dueDate", source = "dueDate")
+    @Mapping(target = "dueDate", source = "dueDate", qualifiedByName = "stringToLocalDateTime")
     TaskDocument toTaskDocument(TaskReqDto taskReqDto);
 
     @Mapping(target = "assignedUsers", source = "assignedUsers")
@@ -75,6 +75,13 @@ public interface TaskMapper {
         }
         return dateTime.atOffset(ZoneOffset.UTC)
                 .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    }
+
+    @Named("stringToLocalDateTime")
+    default LocalDateTime stringToLocalDateTime(String s) {
+        if (s == null || s.isBlank()) return null;
+        // ISO_DATE_TIME gère le "Z" à la fin
+        return LocalDateTime.parse(s, DateTimeFormatter.ISO_DATE_TIME);
     }
 
     // Enum mappings

@@ -240,4 +240,23 @@ public class TaskService extends AbstractService {
 
         taskRepository.delete(task);
     }
+
+    /**
+     * Get the most three recent tasks for a colocation
+     */
+    @Transactional(readOnly = true)
+    public List<TaskResDto> getMostRecentTasks(Long colocationId) throws TechnicalException {
+        String userSub = getUserSub();
+        User user = userRepository.findByKeyCloakSub(userSub)
+                .orElseThrow(() -> new TechnicalException(404, "Utilisateur n'est pas trouvé"));
+        Colocation colocation = colocationRepository.findById(colocationId)
+                .orElseThrow(() -> new TechnicalException(404, "Colocation non trouvée"));
+        if (!colocation.isRoommate(user)) {
+            throw new TechnicalException(403, "Vous n'avez pas accès à cette colocation");
+        }
+
+        List<TaskDocument> latest = taskRepository.findTop3ByColocationIdOrderByCreatedAtAsc(colocationId);
+        return latest.stream().map(taskMapper::toTaskResDto).toList();
+
+    }
 }
