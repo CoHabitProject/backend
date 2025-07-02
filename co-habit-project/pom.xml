@@ -19,25 +19,26 @@
         <developer>
             <name>Axel Gallic</name>
             <roles>
-                <role>Developer</role>
+                <role>Front-end developer</role>
             </roles>
         </developer>
         <developer>
             <name>Bertrand Renaudin</name>
             <roles>
                 <role>Principal DevOps</role>
+                <role>Back-end developer</role>
             </roles>
         </developer>
         <developer>
             <name>Carlos Cerén</name>
             <roles>
-                <role>Developer</role>
+                <role>Principal front-end developer</role>
             </roles>
         </developer>
         <developer>
             <name>Dmitri Chine</name>
             <roles>
-                <role>Principal developer</role>
+                <role>Principal back-end developer</role>
             </roles>
         </developer>
     </developers>
