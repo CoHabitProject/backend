@@ -170,4 +170,29 @@ class TaskRestTest {
         assertThat(ex.getCode()).isEqualTo(400);
         assertThat(ex.getMessage()).contains("Données invalides");
     }
+
+    @Test
+    void getRecentTasks_ShouldReturnRecentTasks() throws TechnicalException {
+        // Prepare
+        List<TaskResDto> recentTasks = List.of(
+            TaskResDto.builder().id("r1").title("Tâche 1").build(),
+            TaskResDto.builder().id("r2").title("Tâche 2").build()
+        );
+
+        when(taskService.getMostRecentTasks(eq(idCollocation)))
+            .thenReturn(recentTasks);
+
+        // When
+        List<TaskResDto> result = taskRest.getRecentTasks(idCollocation);
+
+        // Assertions
+        assertThat(result).isEqualTo(recentTasks);
+        assertThat(result).hasSize(2)
+                          .extracting(TaskResDto::getId)
+                          .containsExactly("r1", "r2");
+
+        // Verify
+        verify(taskService).getMostRecentTasks(idCollocation);
+    }
+
 }

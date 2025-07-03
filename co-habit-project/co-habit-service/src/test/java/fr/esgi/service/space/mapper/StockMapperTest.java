@@ -4,224 +4,217 @@ import fr.esgi.domain.dto.space.StockItemReqDto;
 import fr.esgi.domain.dto.space.StockItemResDto;
 import fr.esgi.domain.dto.space.StockReqDto;
 import fr.esgi.domain.dto.space.StockResDto;
-import fr.esgi.persistence.entity.space.Colocation;
 import fr.esgi.persistence.entity.space.StockEntity;
 import fr.esgi.persistence.entity.space.StockItemEntity;
-import fr.esgi.persistence.entity.user.User;
 import fr.esgi.service.registration.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class StockMapperTest {
 
     private StockMapper mapper;
 
-    private StockReqDto stockReqDto;
-    private StockEntity stockEntity;
-
-    private StockItemReqDto itemReqDto;
-    private StockItemEntity itemEntity;
-
-    private User addedBy;
-
     @BeforeEach
     void setUp() throws Exception {
-        mapper = Mappers.getMapper(StockMapper.class);
-
+        StockMapperImpl stockMapper = new StockMapperImpl();
         UserMapper userMapper = Mappers.getMapper(UserMapper.class);
-        // via reflection car le champ est privé
-        Field f = mapper.getClass().getDeclaredField("userMapper");
-        f.setAccessible(true);
-        f.set(mapper, userMapper);
-
-        // --- StockReqDto
-        stockReqDto = new StockReqDto();
-        stockReqDto.setTitle("Frigo");
-        stockReqDto.setImageAsset("fridge.png");
-        stockReqDto.setColor("#FF5733");
-        stockReqDto.setMaxCapacity(50);
-
-        // --- StockEntity
-        stockEntity = new StockEntity();
-        stockEntity.setId(10L);
-        stockEntity.setTitle("Ancien titre");
-        stockEntity.setImageAsset("old.png");
-        stockEntity.setColor("#000000");
-        stockEntity.setMaxCapacity(20);
-        // on simule une colocation attachée
-        stockEntity.setColocation(new Colocation());
-        // on ajoute quelques items
-        StockItemEntity e1 = new StockItemEntity();
-        e1.setQuantity(5);
-        StockItemEntity e2 = new StockItemEntity();
-        e2.setQuantity(10);
-        stockEntity.getItems().addAll(Arrays.asList(e1, e2));
-
-        // --- StockItemReqDto
-        itemReqDto = new StockItemReqDto();
-        itemReqDto.setName("Lait");
-        itemReqDto.setQuantity(2);
-
-        // --- StockItemEntity
-        itemEntity = new StockItemEntity();
-        itemEntity.setId(100L);
-        itemEntity.setName("Beurre");
-        itemEntity.setQuantity(3);
-        addedBy = new User();
-        addedBy.setId(1L);
-        addedBy.setFirstName("Paul");
-        addedBy.setLastName("Dupont");
-        addedBy.setEmail("paul.dupont@test.com");
-        itemEntity.setAddedBy(addedBy);
-        // addedAt / stock sont gérés par JPA mais ignorés par le mapper
+        Field userMapFields = StockMapperImpl.class.getDeclaredField("userMapper");
+        userMapFields.setAccessible(true);
+        userMapFields.set(stockMapper, userMapper);
+        this.mapper = stockMapper;
     }
 
     @Test
-    void testMapDtoToStock() {
-        StockEntity result = mapper.mapDtoToStock(stockReqDto);
+    void shouldMapDtoToStockEntity() {
+        StockReqDto dto = new StockReqDto();
+        dto.setTitle("Frigo");
+        dto.setColor("Blanc");
+        dto.setImageAsset("frigo.png");
+        dto.setMaxCapacity(10);
 
-        assertThat(result).isNotNull();
-        assertThat(result.getTitle()).isEqualTo(stockReqDto.getTitle());
-        assertThat(result.getImageAsset()).isEqualTo(stockReqDto.getImageAsset());
-        assertThat(result.getColor()).isEqualTo(stockReqDto.getColor());
-        assertThat(result.getMaxCapacity()).isEqualTo(stockReqDto.getMaxCapacity());
+        StockEntity entity = mapper.mapDtoToStock(dto);
 
-        // champs ignorés
-        assertThat(result.getId()).isNull();
-        assertThat(result.getColocation()).isNull();
-        assertThat(result.getItems()).isEmpty();
+        assertNotNull(entity);
+        assertNull(entity.getId());
+        assertEquals("Frigo", entity.getTitle());
+        assertEquals("Blanc", entity.getColor());
+        assertEquals("frigo.png", entity.getImageAsset());
+        assertEquals(10, entity.getMaxCapacity());
+        assertNull(entity.getColocation());
+        assertTrue(entity.getItems().isEmpty());
     }
 
     @Test
-    void testMapDtoToStock_WithNull() {
-        StockEntity result = mapper.mapDtoToStock(null);
-        assertThat(result).isNull();
+    void shouldMapStockEntityToResDto_andCalculateItemCount() {
+        StockEntity stock = new StockEntity();
+        stock.setId(5L);
+        stock.setTitle("Placard");
+        stock.setColor("Bois");
+        stock.setMaxCapacity(20);
+
+        // add 3 items
+        StockItemEntity i1 = new StockItemEntity();
+        i1.setQuantity(2);
+        stock.addItem(i1);
+
+        StockItemEntity i2 = new StockItemEntity();
+        i2.setQuantity(3);
+        stock.addItem(i2);
+
+        StockItemEntity i3 = new StockItemEntity();
+        i3.setQuantity(null);
+        stock.addItem(i3);
+
+        StockResDto res = mapper.mapStockToResDto(stock);
+
+        assertNotNull(res);
+        assertEquals(5L, res.getId());
+        assertEquals("Placard", res.getTitle());
+        assertEquals("Bois", res.getColor());
+        assertEquals(20, res.getMaxCapacity());
+        // 2 + 3 + (null→0) = 5
+        assertEquals(5, res.getItemCount());
     }
 
     @Test
-    void testMapStockToResDto() {
-        StockResDto dto = mapper.mapStockToResDto(stockEntity);
+    void shouldMapListOfStocksToResDtos() {
+        StockEntity s1 = new StockEntity();
+        s1.setId(1L);
+        StockEntity s2 = new StockEntity();
+        s2.setId(2L);
 
-        assertThat(dto).isNotNull();
-        assertThat(dto.getTitle()).isEqualTo(stockEntity.getTitle());
-        assertThat(dto.getImageAsset()).isEqualTo(stockEntity.getImageAsset());
-        assertThat(dto.getColor()).isEqualTo(stockEntity.getColor());
-        assertThat(dto.getMaxCapacity()).isEqualTo(stockEntity.getMaxCapacity());
-        // calculateTotalQuantity : 5 + 10 = 15
-        assertThat(dto.getItemCount()).isEqualTo(15);
+        List<StockResDto> list = mapper.mapStocksToResDtos(List.of(s1, s2));
+        assertNotNull(list);
+        assertEquals(2, list.size());
+        assertEquals(1L, list.get(0).getId());
+        assertEquals(2L, list.get(1).getId());
     }
 
     @Test
-    void testMapStockToResDto_WithNullItems() {
-        stockEntity.setItems(null);
-        StockResDto dto = mapper.mapStockToResDto(stockEntity);
-        assertThat(dto.getItemCount()).isZero();
+    void shouldUpdateStockEntityFromDto() {
+        StockReqDto dto = new StockReqDto();
+        dto.setTitle("Nouveau titre");
+        dto.setColor("Rouge");
+        dto.setImageAsset("nouveau.png");
+        dto.setMaxCapacity(50);
+
+        StockEntity existing = new StockEntity();
+        existing.setId(9L);
+        existing.setTitle("Ancien");
+        existing.setColor("Vert");
+        existing.setImageAsset("ancien.png");
+        existing.setMaxCapacity(30);
+
+        // add an item to ensure we don't touch the list
+        StockItemEntity item = new StockItemEntity();
+        item.setQuantity(1);
+        existing.addItem(item);
+
+        mapper.updateStockFromDto(dto, existing);
+
+        assertEquals(9L, existing.getId());
+        assertEquals("Nouveau titre", existing.getTitle());
+        assertEquals("Rouge", existing.getColor());
+        assertEquals("nouveau.png", existing.getImageAsset());
+        assertEquals(50, existing.getMaxCapacity());
+        assertEquals(1, existing.getItems().size());
     }
 
     @Test
-    void testMapStocksToResDtos() {
-        StockEntity other = new StockEntity();
-        other.setTitle("Armoire");
-        other.setItems(new ArrayList<>());
-        List<StockResDto> list = mapper.mapStocksToResDtos(Arrays.asList(stockEntity, other));
+    void shouldMapDtoToStockItemEntity() {
+        StockItemReqDto dto = new StockItemReqDto();
+        dto.setName("Lait");
+        dto.setQuantity(2);
 
-        assertThat(list).hasSize(2);
-        assertThat(list.get(0).getTitle()).isEqualTo("Ancien titre");
-        assertThat(list.get(1).getTitle()).isEqualTo("Armoire");
+        StockItemEntity entity = mapper.mapDtoToStockItem(dto);
+
+        assertNotNull(entity);
+        assertNull(entity.getId());
+        assertEquals("Lait", entity.getName());
+        assertEquals(2, entity.getQuantity());
+        assertNull(entity.getStock());
+        assertNull(entity.getAddedBy());
+        assertNull(entity.getAddedAt());
     }
 
     @Test
-    void testMapStocksToResDtos_WithNullList() {
-        List<StockResDto> list = mapper.mapStocksToResDtos(null);
-        assertThat(list).isNull();
+    void shouldMapStockItemEntityToResDto() {
+        StockItemEntity entity = new StockItemEntity();
+        entity.setId(7L);
+        entity.setName("Pain");
+        entity.setQuantity(3);
+
+        // emulate adding a user
+        var user = new fr.esgi.persistence.entity.user.User();
+        user.setId(4L);
+        user.setFirstName("Jean");
+        user.setLastName("Dupont");
+        entity.setAddedBy(user);
+
+        var now = java.time.LocalDateTime.of(2025, 6, 10, 9, 0);
+        entity.setAddedAt(now);
+
+        StockItemResDto res = mapper.mapStockItemToResDto(entity);
+
+        assertNotNull(res);
+        assertEquals(7L, res.getId());
+        assertEquals("Pain", res.getName());
+        assertEquals(3, res.getQuantity());
+        assertNotNull(res.getAddedBy());
+        assertEquals("Jean", res.getAddedBy().getFirstName());
+        assertEquals("Dupont", res.getAddedBy().getLastName());
     }
 
     @Test
-    void testUpdateStockFromDto() {
-        StockEntity target = new StockEntity();
-        target.setId(5L);
-        target.setTitle("X");
-        target.setImageAsset("x.png");
-        target.setColor("#FFFFFF");
-        target.setMaxCapacity(10);
-        target.setColocation(new Colocation());
-
-        mapper.updateStockFromDto(stockReqDto, target);
-
-        // champs mis à jour
-        assertThat(target.getTitle()).isEqualTo("Frigo");
-        assertThat(target.getImageAsset()).isEqualTo("fridge.png");
-        assertThat(target.getColor()).isEqualTo("#FF5733");
-        assertThat(target.getMaxCapacity()).isEqualTo(50);
-
-        // champs ignorés
-        assertThat(target.getId()).isEqualTo(5L);
-        assertThat(target.getColocation()).isNotNull();
+    void shouldMapListOfStockItemsToResDtos() {
+        StockItemEntity a = new StockItemEntity(); a.setId(1L);
+        StockItemEntity b = new StockItemEntity(); b.setId(2L);
+        List<StockItemResDto> dtos = mapper.mapStockItemsToResDtos(List.of(a, b));
+        assertNotNull(dtos);
+        assertEquals(2, dtos.size());
+        assertEquals(1L, dtos.get(0).getId());
+        assertEquals(2L, dtos.get(1).getId());
     }
 
     @Test
-    void testMapDtoToStockItem() {
-        StockItemEntity e = mapper.mapDtoToStockItem(itemReqDto);
+    void shouldUpdateStockItemEntityFromDto() {
+        StockItemReqDto dto = new StockItemReqDto();
+        dto.setName("Beurre");
+        dto.setQuantity(5);
 
-        assertThat(e).isNotNull();
-        assertThat(e.getName()).isEqualTo(itemReqDto.getName());
-        assertThat(e.getQuantity()).isEqualTo(itemReqDto.getQuantity());
+        StockItemEntity existing = new StockItemEntity();
+        existing.setId(8L);
+        existing.setName("Ancien");
+        existing.setQuantity(1);
+        existing.setAddedBy(new fr.esgi.persistence.entity.user.User());
+        existing.setAddedAt(java.time.LocalDateTime.now());
 
-        assertThat(e.getId()).isNull();
-        assertThat(e.getStock()).isNull();
-        assertThat(e.getAddedBy()).isNull();
-        assertThat(e.getAddedAt()).isNull();
+        mapper.updateStockItemFromDto(dto, existing);
+
+        assertEquals(8L, existing.getId());
+        assertEquals("Beurre", existing.getName());
+        assertEquals(5, existing.getQuantity());
+        // addedBy et addedAt mustn't change
+        assertNotNull(existing.getAddedBy());
+        assertNotNull(existing.getAddedAt());
     }
 
     @Test
-    void testMapDtoToStockItem_WithNull() {
-        assertThat(mapper.mapDtoToStockItem(null)).isNull();
-    }
-
-    @Test
-    void testMapStockItemToResDto() {
-        StockItemResDto dto = mapper.mapStockItemToResDto(itemEntity);
-        assertThat(dto).isNotNull();
-        assertThat(dto.getName()).isEqualTo(itemEntity.getName());
-        assertThat(dto.getQuantity()).isEqualTo(itemEntity.getQuantity());
-        // addedBy doit être mappé via UserMapper
-        assertThat(dto.getAddedBy()).isNotNull();
-        assertThat(dto.getAddedBy().getFirstName()).isEqualTo("Paul");
-    }
-
-    @Test
-    void testMapStockItemsToResDtos() {
-        List<StockItemResDto> dtos = mapper.mapStockItemsToResDtos(Arrays.asList(itemEntity));
-        assertThat(dtos).hasSize(1);
-        assertThat(dtos.get(0).getName()).isEqualTo("Beurre");
-    }
-
-    @Test
-    void testMapStockItemsToResDtos_WithNullList() {
-        List<StockItemResDto> dtos = mapper.mapStockItemsToResDtos(null);
-        assertThat(dtos).isNull();
-    }
-
-    @Test
-    void testUpdateStockItemFromDto() {
-        StockItemEntity target = new StockItemEntity();
-        target.setId(200L);
-        target.setName("Ancien");
-        target.setQuantity(5);
-
-        mapper.updateStockItemFromDto(itemReqDto, target);
-
-        assertThat(target.getName()).isEqualTo("Lait");
-        assertThat(target.getQuantity()).isEqualTo(2);
-        // champs ignorés
-        assertThat(target.getId()).isEqualTo(200L);
+    void shouldHandleNullCalculateTotalQuantity() {
+        StockEntity empty = new StockEntity();
+        // items null or empty → 0
+        empty.setItems(null);
+        assertEquals(0, mapper.calculateTotalQuantity(empty));
+        empty.setItems(List.of());
+        assertEquals(0, mapper.calculateTotalQuantity(empty));
     }
 }
