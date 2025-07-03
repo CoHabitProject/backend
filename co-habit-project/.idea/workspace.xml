@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="304ed2b1-7377-4180-b3e2-d995c9fb5c66" name="Changes" comment="Work on task">
-      <change afterPath="$PROJECT_DIR$/co-habit-service/src/test/java/fr/esgi/service/space/mapper/ColocationMapperTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/co-habit-service/src/test/java/fr/esgi/service/space/mapper/StockMapperTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/co-habit-service/src/test/java/fr/esgi/service/space/mapper/UserRelationshipMapperTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.env" beforeDir="false" afterPath="$PROJECT_DIR$/../.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/co-habit-rest/src/test/java/fr/esgi/rest/interne/TaskRestTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-rest/src/test/java/fr/esgi/rest/interne/TaskRestTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-application/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-application/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/co-habit-security/src/main/java/fr/esgi/security/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,71 +65,66 @@
     <option name="showModules" value="false" />
     <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JUnit.All in co-habit-domain.executor": "Run",
-    "JUnit.All in co-habit-project.executor": "Run",
-    "JUnit.AuthRestTest.executor": "Run",
-    "JUnit.ColocationMapperTest.executor": "Run",
-    "JUnit.FunctionalExceptionTest.executor": "Run",
-    "JUnit.KeycloakAuthServiceTest.executor": "Run",
-    "JUnit.ProfileDiagnostic.executor": "Run",
-    "JUnit.ProfileRestTest.executor": "Run",
-    "JUnit.StockMapperTest.executor": "Run",
-    "JUnit.TaskRepositoryIntegrationTest.executor": "Run",
-    "JUnit.TaskRepositoryTest.executor": "Run",
-    "JUnit.TaskRestTest.executor": "Run",
-    "JUnit.TaskServiceTest.executor": "Run",
-    "JUnit.TechnicalExceptionTest.executor": "Run",
-    "JUnit.TokenExceptionTest.executor": "Run",
-    "JUnit.UserRelationServiceTest.executor": "Run",
-    "JUnit.UserRelationshipMapperTest.executor": "Run",
-    "JUnit.UserRelationshipRepositoryTest.executor": "Run",
-    "JUnit.UserRepositoryInMemoryTest.executor": "Run",
-    "JUnit.UserRepositoryLocalDbTest.executor": "Run",
-    "JUnit.UserRepositoryLocalDbTest.shouldCreateParentChildRelationship.executor": "Run",
-    "JUnit.UserRepositoryLocalDbTest.shouldFindAllParentsWithConfirmedRelationships.executor": "Run",
-    "JUnit.UserRepositoryLocalDbTest.shouldSaveUser.executor": "Run",
-    "JUnit.UserRepositoryTest.executor": "Run",
-    "JUnit.UserRepositoryTest.shouldFindAllParentsWithConfirmedRelationships.executor": "Run",
-    "JUnit.UserServiceTest.executor": "Run",
-    "Maven.co-habit-domain [clean,package].executor": "Run",
-    "Maven.co-habit-domain [compile].executor": "Run",
-    "Maven.co-habit-domain [verify].executor": "Run",
-    "Maven.co-habit-persistence [test].executor": "Run",
-    "Maven.co-habit-project [clean,install].executor": "Run",
-    "Maven.co-habit-project [clean,test].executor": "Run",
-    "Maven.co-habit-project [clean].executor": "Run",
-    "Maven.co-habit-project [compile].executor": "Run",
-    "Maven.co-habit-project [dependency-check:check].executor": "Run",
-    "Maven.co-habit-project [install].executor": "Run",
-    "Maven.co-habit-project [test].executor": "Run",
-    "Maven.co-habit-project [verify].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.CoHabitApplication.executor": "Run",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "git-widget-placeholder": "#16 on feature__task-rest-controller",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/ds/0_workspace/_IntellJ/perojet-annuel/backend/co-habit-project",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "actions.on.save",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JUnit.All in co-habit-domain.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in co-habit-project.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AuthRestTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.FunctionalExceptionTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.KeycloakAuthServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ProfileDiagnostic.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ProfileRestTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TaskRestTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TaskServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TechnicalExceptionTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TokenExceptionTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UserRelationServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UserRelationshipRepositoryTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UserRepositoryInMemoryTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UserRepositoryLocalDbTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UserRepositoryLocalDbTest.shouldCreateParentChildRelationship.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UserRepositoryLocalDbTest.shouldFindAllParentsWithConfirmedRelationships.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UserRepositoryLocalDbTest.shouldSaveUser.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UserRepositoryTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UserRepositoryTest.shouldFindAllParentsWithConfirmedRelationships.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UserServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.co-habit-domain [clean,package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.co-habit-domain [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.co-habit-domain [verify].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.co-habit-persistence [test].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.co-habit-project [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.co-habit-project [clean,test].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.co-habit-project [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.co-habit-project [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.co-habit-project [dependency-check:check].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.co-habit-project [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.co-habit-project [test].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.co-habit-project [verify].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.CoHabitApplication.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#16 on feature__task-rest-controller&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/ds/0_workspace/_IntellJ/perojet-annuel/backend/co-habit-project&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;actions.on.save&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -147,84 +142,84 @@
       <recent name="fr.esgi.persistence" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
-      <recent name="fr.esgi.service.space.mapper" />
       <recent name="fr.esgi.rest.interne" />
       <recent name="fr.esgi.service.registration" />
       <recent name="fr.esgi.security.service" />
       <recent name="fr.esgi.rest.global" />
+      <recent name="fr.esgi.persistence.repository" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.UserRelationshipMapperTest">
-    <configuration name="ColocationMapperTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="co-habit-service" />
+  <component name="RunManager" selected="Spring Boot.CoHabitApplication">
+    <configuration name="TaskRestTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="co-habit-rest" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="fr.esgi.service.space.mapper.*" />
+          <option name="PATTERN" value="fr.esgi.rest.interne.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="fr.esgi.service.space.mapper" />
-      <option name="MAIN_CLASS_NAME" value="fr.esgi.service.space.mapper.ColocationMapperTest" />
+      <option name="PACKAGE_NAME" value="fr.esgi.rest.interne" />
+      <option name="MAIN_CLASS_NAME" value="fr.esgi.rest.interne.TaskRestTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StockMapperTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TaskServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="co-habit-service" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="fr.esgi.service.space.mapper.*" />
+          <option name="PATTERN" value="fr.esgi.service.task.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="fr.esgi.service.space.mapper" />
-      <option name="MAIN_CLASS_NAME" value="fr.esgi.service.space.mapper.StockMapperTest" />
+      <option name="PACKAGE_NAME" value="fr.esgi.service.task" />
+      <option name="MAIN_CLASS_NAME" value="fr.esgi.service.task.TaskServiceTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TaskRepositoryIntegrationTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="UserRelationServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="co-habit-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="fr.esgi.service.space.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="fr.esgi.service.space" />
+      <option name="MAIN_CLASS_NAME" value="fr.esgi.service.space.UserRelationServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserRepositoryInMemoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="co-habit-persistence" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="fr.esgi.persistence.repository.task.*" />
+          <option name="PATTERN" value="fr.esgi.persistence.repository.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="fr.esgi.persistence.repository.task" />
-      <option name="MAIN_CLASS_NAME" value="fr.esgi.persistence.repository.task.TaskRepositoryIntegrationTest" />
+      <option name="PACKAGE_NAME" value="fr.esgi.persistence.repository" />
+      <option name="MAIN_CLASS_NAME" value="fr.esgi.persistence.repository.UserRepositoryInMemoryTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TaskRepositoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="UserRepositoryLocalDbTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="co-habit-persistence" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="fr.esgi.persistence.repository.task.*" />
+          <option name="PATTERN" value="fr.esgi.persistence.repository.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="fr.esgi.persistence.repository.task" />
-      <option name="MAIN_CLASS_NAME" value="fr.esgi.persistence.repository.task.TaskRepositoryTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="UserRelationshipMapperTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="co-habit-service" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="fr.esgi.service.space.mapper.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="fr.esgi.service.space.mapper" />
-      <option name="MAIN_CLASS_NAME" value="fr.esgi.service.space.mapper.UserRelationshipMapperTest" />
+      <option name="PACKAGE_NAME" value="fr.esgi.persistence.repository" />
+      <option name="MAIN_CLASS_NAME" value="fr.esgi.persistence.repository.UserRepositoryLocalDbTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -245,19 +240,20 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="JUnit.ColocationMapperTest" />
-      <item itemvalue="JUnit.StockMapperTest" />
-      <item itemvalue="JUnit.TaskRepositoryIntegrationTest" />
-      <item itemvalue="JUnit.TaskRepositoryTest" />
-      <item itemvalue="JUnit.UserRelationshipMapperTest" />
+      <item itemvalue="JUnit.TaskRestTest" />
+      <item itemvalue="JUnit.TaskServiceTest" />
+      <item itemvalue="JUnit.UserRelationServiceTest" />
+      <item itemvalue="JUnit.UserRepositoryLocalDbTest" />
+      <item itemvalue="JUnit.UserRepositoryInMemoryTest" />
+      <item itemvalue="Spring Boot.CoHabitApplication" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.UserRelationshipMapperTest" />
-        <item itemvalue="JUnit.StockMapperTest" />
-        <item itemvalue="JUnit.ColocationMapperTest" />
-        <item itemvalue="JUnit.TaskRepositoryIntegrationTest" />
-        <item itemvalue="JUnit.TaskRepositoryTest" />
+        <item itemvalue="JUnit.TaskServiceTest" />
+        <item itemvalue="JUnit.TaskRestTest" />
+        <item itemvalue="JUnit.UserRelationServiceTest" />
+        <item itemvalue="JUnit.UserRepositoryInMemoryTest" />
+        <item itemvalue="JUnit.UserRepositoryLocalDbTest" />
       </list>
     </recent_temporary>
   </component>
@@ -290,6 +286,7 @@
       <workItem from="1750495025658" duration="5885000" />
       <workItem from="1751311839286" duration="2011000" />
       <workItem from="1751356667072" duration="3732000" />
+      <workItem from="1751568287653" duration="1008000" />
     </task>
     <servers />
   </component>

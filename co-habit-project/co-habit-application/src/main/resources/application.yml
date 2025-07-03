@@ -1,5 +1,5 @@
 keycloak:
-  auth-server-url: http://localhost:8088
+  auth-server-url: ${KEYCLOAK_AUTH_SERVER_URL:http://localhost:8088}
   realm: co-habit
   client:
     registration:
@@ -18,7 +18,7 @@ spring:
           issuer-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}
           jwk-set-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
   datasource:
-    url: jdbc:postgresql://localhost:5432/cohabit
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/cohabit}
     username: cohabit
     password: password
     driver-class-name: org.postgresql.Driver
@@ -33,9 +33,12 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
-  elasticsearch: 
+  elasticsearch:
     uris:
-      - http://localhost:9200
+      - ${SPRING_ELASTICSEARCH_URIS:http://elasticsearch:9200}
+    connection-timeout: 30s
+    socket-timeout: 30s
+    max-retry-timeout: 120s
     schema-management:
       auto-create-index: true
 
@@ -61,3 +64,16 @@ project:
 logging:
   level:
     org.springframework.web: DEBUG
+    org.springframework.elasticsearch: DEBUG
+    org.elasticsearch: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    prometheus:
+      enabled: true
+    health:
+      show-details: always
