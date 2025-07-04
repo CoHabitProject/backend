@@ -47,7 +47,7 @@
         <module>co-habit-rest</module>
         <module>co-habit-web</module>
         <module>co-habit-security</module>
-        <module>co-habit-domain</module>
+        <module>co-habit-common</module>
         <module>co-habit-persistence</module>
         <module>co-habit-service</module>
     </modules>

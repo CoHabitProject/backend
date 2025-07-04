@@ -44,7 +44,7 @@
     <dependencies>
         <dependency>
             <groupId>fr.esgi</groupId>
-            <artifactId>co-habit-domain</artifactId>
+            <artifactId>co-habit-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
