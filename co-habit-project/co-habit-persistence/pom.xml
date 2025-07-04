@@ -40,7 +40,7 @@
         <!-- Module dependencies -->
         <dependency>
             <groupId>fr.esgi</groupId>
-            <artifactId>co-habit-domain</artifactId>
+            <artifactId>co-habit-common</artifactId>
             <version>${project.version}</version>
         </dependency>
         
