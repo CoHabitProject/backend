@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -55,7 +56,7 @@ public class TaskDocument {
     @Field(type = FieldType.Date, name = "created_at")
     private LocalDateTime createdAt;
 
-    @Field(type = FieldType.Date, name = "due_date")
+    @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_millis, name = "due_date")
     private LocalDateTime dueDate;
 
     @Field(type = FieldType.Date, name = "completed_at")
@@ -82,6 +83,7 @@ public class TaskDocument {
 
     public enum TaskStatus {
         TODO,
+        PENDING,
         IN_PROGRESS,
         COMPLETED,
         CANCELLED

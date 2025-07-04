@@ -18,4 +18,6 @@ public interface TaskRepository extends ElasticsearchRepository<TaskDocument, St
     List<TaskDocument> findByAssignedToUserKeycloakSubs(String assignedToUserKeycloakSub);
     
     List<TaskDocument> findByColocationIdAndAssignedToUserKeycloakSubs(Long colocationId, String userKeycloakSub);
+
+    List<TaskDocument> findTop3ByColocationIdOrderByCreatedAtAsc(Long colocationId);
 }

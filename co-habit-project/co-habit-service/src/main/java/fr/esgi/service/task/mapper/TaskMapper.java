@@ -11,17 +11,18 @@ import org.mapstruct.factory.Mappers;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
-    
+
     TaskMapper INSTANCE = Mappers.getMapper(TaskMapper.class);
-    
+
     @Mapping(target = "createdAt", source = "createdAt", qualifiedByName = "localDateTimeToString")
     @Mapping(target = "completedAt", source = "completedAt", qualifiedByName = "localDateTimeToString")
-    @Mapping(target = "dueDate", source = "dueDate")
+    @Mapping(target = "dueDate", source = "dueDate", qualifiedByName = "localDateTimeToISOString")
     @Mapping(target = "assignedUsers", ignore = true)
     TaskResDto toTaskResDto(TaskDocument taskDocument);
     
@@ -35,27 +36,28 @@ public interface TaskMapper {
     @Mapping(target = "completedAt", ignore = true)
     @Mapping(target = "creatorId", ignore = true)
     @Mapping(target = "assignedToUserKeycloakSubs", ignore = true)
-    @Mapping(target = "dueDate", source = "dueDate")
+    @Mapping(target = "dueDate", source = "dueDate", qualifiedByName = "stringToLocalDateTime")
     TaskDocument toTaskDocument(TaskReqDto taskReqDto);
-    
+
     @Mapping(target = "assignedUsers", source = "assignedUsers")
     @Mapping(target = "dueDate", source = "taskDocument.dueDate", qualifiedByName = "localDateToLocalDateTime")
     TaskResDto toTaskResDtoWithUsers(TaskDocument taskDocument, List<UserProfileResDto> assignedUsers);
-    
+
     @Named("localDateTimeToString")
     default String localDateTimeToString(LocalDateTime dateTime) {
         if (dateTime == null) {
             return null;
         }
-        return dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        return dateTime.atOffset(ZoneOffset.UTC)
+                .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
     
     @Named("localDateToLocalDateTime")
-    default LocalDateTime localDateToLocalDateTime(LocalDate date) {
+    default String localDateToLocalDateTime(LocalDate date) {
         if (date == null) {
             return null;
         }
-        return date.atStartOfDay();
+        return date.toString();
     }
     
     @Named("localDateTimeToLocalDate")
@@ -65,12 +67,30 @@ public interface TaskMapper {
         }
         return dateTime.toLocalDate();
     }
-    
+
+    @Named("localDateTimeToISOString")
+    default String localDateTimeToISOString(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            return null;
+        }
+        return dateTime.atOffset(ZoneOffset.UTC)
+                .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    }
+
+    @Named("stringToLocalDateTime")
+    default LocalDateTime stringToLocalDateTime(String s) {
+        if (s == null || s.isBlank()) return null;
+        // ISO_DATE_TIME gère le "Z" à la fin
+        return LocalDateTime.parse(s, DateTimeFormatter.ISO_DATE_TIME);
+    }
+
     // Enum mappings
     default fr.esgi.domain.dto.task.TaskStatus mapStatus(TaskDocument.TaskStatus status) {
         if (status == null) return null;
         return fr.esgi.domain.dto.task.TaskStatus.valueOf(status.name());
     }
+
+
     
     default TaskDocument.TaskStatus mapStatus(fr.esgi.domain.dto.task.TaskStatus status) {
         if (status == null) return null;

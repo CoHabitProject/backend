@@ -1,8 +1,8 @@
 package fr.esgi.service.registration.mapper;
 
+import fr.esgi.domain.DateUtils;
 import fr.esgi.domain.dto.auth.RegisterReqDto;
 import fr.esgi.domain.dto.user.UserProfileResDto;
-import fr.esgi.domain.util.DateUtils;
 import fr.esgi.persistence.entity.user.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

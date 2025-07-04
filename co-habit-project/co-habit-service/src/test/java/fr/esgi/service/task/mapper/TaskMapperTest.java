@@ -58,7 +58,7 @@ class TaskMapperTest {
         assertEquals(TaskStatus.IN_PROGRESS, result.getStatus());
         assertEquals(TaskPriority.HIGH, result.getPriority());
         assertEquals("2025-01-15T10:30:00", result.getCreatedAt());
-        assertEquals(LocalDateTime.of(2025, 02, 01, 0, 0), result.getDueDate());
+        assertEquals("2025-02-01T00:00:00", result.getDueDate());
         assertEquals("2025-01-20T14:45:00", result.getCompletedAt());
         assertEquals(2L, result.getCreatorId());
         assertEquals(Set.of(1L, 2L), result.getAssignedUserIds());
@@ -74,7 +74,7 @@ class TaskMapperTest {
         taskReqDto.setDescription("New Description");
         taskReqDto.setStatus(TaskStatus.TODO);
         taskReqDto.setPriority(TaskPriority.MEDIUM);
-        taskReqDto.setDueDate(LocalDateTime.of(2025, 3, 15, 0, 0));
+        taskReqDto.setDueDate("2025-03-15T00:00:00.00");
         taskReqDto.setAssignedUserIds(Set.of(3L, 4L));
         taskReqDto.setTags(Set.of("shopping", "weekly"));
 
@@ -260,7 +260,7 @@ class TaskMapperTest {
         assertEquals(TaskStatus.CANCELLED, result.getStatus());
         assertEquals(TaskPriority.URGENT, result.getPriority());
         assertEquals("2025-01-01T12:00:00", result.getCreatedAt());
-        assertEquals(LocalDateTime.of(2025, 12, 31, 0, 0), result.getDueDate());
+        assertEquals("2025-12-31T00:00:00", result.getDueDate());
         assertEquals("2025-01-02T15:30:00", result.getCompletedAt());
         assertEquals(300L, result.getCreatorId());
         assertEquals(Set.of(100L, 200L, 300L), result.getAssignedUserIds());

@@ -1,5 +1,6 @@
 package fr.esgi.service.task;
 
+import fr.esgi.domain.DateUtils;
 import fr.esgi.domain.dto.task.TaskReqDto;
 import fr.esgi.domain.dto.task.TaskResDto;
 import fr.esgi.domain.dto.task.TaskStatus;
@@ -11,6 +12,7 @@ import fr.esgi.persistence.repository.space.ColocationRepository;
 import fr.esgi.persistence.repository.task.TaskRepository;
 import fr.esgi.persistence.repository.user.UserRepository;
 import fr.esgi.service.AbstractTest;
+import fr.esgi.service.registration.mapper.UserMapper;
 import fr.esgi.service.task.mapper.TaskMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,12 +72,16 @@ public class TaskServiceTest extends AbstractTest {
         }
 
         @Bean
+        public UserMapper userMapper() { return Mappers.getMapper(UserMapper.class); }
+
+        @Bean
         public TaskService taskService(
                 TaskRepository taskRepository,
                 UserRepository userRepository,
                 ColocationRepository colocationRepository,
-                TaskMapper taskMapper) {
-            return new TaskService(taskRepository, userRepository, colocationRepository, taskMapper);
+                TaskMapper taskMapper,
+                UserMapper userMapper) {
+            return new TaskService(taskRepository, userRepository, colocationRepository, taskMapper, userMapper);
         }
     }
 
@@ -174,8 +180,8 @@ public class TaskServiceTest extends AbstractTest {
         TaskReqDto dto = new TaskReqDto();
         dto.setTitle("Clean Kitchen");
         dto.setDescription("Clean all dishes and surfaces");
-        dto.setDueDate(LocalDateTime.now()
-                                    .plusDays(7));
+        dto.setDueDate(DateUtils.localDateTimeToString(LocalDateTime.now()
+                                                                    .plusDays(7)));
         dto.setStatus(TaskStatus.TODO);
 
         TaskDocument savedTask = new TaskDocument();
@@ -285,20 +291,18 @@ public class TaskServiceTest extends AbstractTest {
     }
 
     @Test
-    public void testGetTaskById_Success() throws
-                                          TechnicalException {
-        // Given
+    public void testGetTaskById_Success() throws TechnicalException {
         this.initSecurityContextPlaceHolderWithSub(TEST_USER_ID);
+        when(taskRepository.findById("existing-task-id"))
+                .thenReturn(Optional.of(existingTask));
 
-        when(taskRepository.findById("existing-task-id")).thenReturn(Optional.of(existingTask));
-
-        // When
         TaskResDto result = taskService.getTaskById("existing-task-id");
 
-        // Then
         assertNotNull(result);
         assertEquals("Existing Task", result.getTitle());
-        assertEquals("Existing Description", result.getDescription());
+        // NOUVEAU
+        assertNotNull(result.getAssignedUsers());
+        assertTrue(result.getAssignedUsers().isEmpty());
         verify(taskRepository).findById("existing-task-id");
     }
 
