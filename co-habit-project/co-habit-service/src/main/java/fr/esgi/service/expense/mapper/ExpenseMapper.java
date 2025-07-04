@@ -4,7 +4,7 @@ import fr.esgi.domain.dto.expense.ExpenseParticipantResDto;
 import fr.esgi.domain.dto.expense.ExpenseReqDto;
 import fr.esgi.domain.dto.expense.ExpenseResDto;
 import fr.esgi.domain.dto.user.UserProfileResDto;
-import fr.esgi.domain.util.DateUtils;
+import fr.esgi.domain.DateUtils;
 import fr.esgi.persistence.entity.expense.Expense;
 import fr.esgi.persistence.entity.expense.ExpenseParticipant;
 import fr.esgi.persistence.entity.user.User;
