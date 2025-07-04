@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  JAVA_VERSION: '17'
+  JAVA_VERSION: '23'
 
 jobs:
   sonar:
@@ -39,10 +39,6 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      
-      - name: Run tests and generate coverage
-        working-directory: ./co-habit-project
-        run: mvn clean test
 
       - name: Build and analyze
         working-directory: ./co-habit-project
